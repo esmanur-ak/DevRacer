@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Speed Racer 🚀</title>
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23090d16' stroke='%23131c2e' stroke-width='4'/%3E%3Cpath d='M 42,22 C 34,22 32,32 32,37 C 32,43 27,47 24,50 C 27,53 32,57 32,63 C 32,68 34,78 42,78' fill='none' stroke='%2338bdf8' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M 58,22 C 66,22 68,32 68,37 C 68,43 73,47 76,50 C 73,53 68,57 68,63 C 68,68 66,78 58,78' fill='none' stroke='%2338bdf8' stroke-width='7' stroke-linecap='round'/%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2322c55e'/%3E%3Cstop offset='100%25' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='46' y='37' width='8' height='26' rx='4' fill='url(%23grad)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="profile.css">
+  <link rel="stylesheet" href="race.css">
+  <!-- PeerJS CDN -->
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>⚡ DEV RACER</h1>
+      <p id="personal-record">🏆 En İyi Süren: <strong id="record-wpm">--</strong> sn</p>
+      <div id="run-history" class="run-history"></div>
+    </header>
+
+    <!-- LOBİ EKRANI -->
+    <div id="lobby-card" class="lobby-container">
+
+      <!-- PROFİL TANIMLAMA ALANI -->
+      <div class="profile-setup card">
+        <label for="player-name">👤 OYUNCU PROFİLİ:</label>
+        <div class="profile-row">
+          <div id="current-avatar-preview" class="avatar-circle-preview"
+            style="background: linear-gradient(135deg, #0284c7, #2563eb);">💻</div>
+          <input type="text" id="player-name" placeholder="Oyuncu adınızı girin..." maxlength="15" value="Yarışçı" />
+        </div>
+        <div class="avatar-picker-label">Avatar Seçin:</div>
+        <div class="avatar-grid" id="avatar-grid">
+          <div class="avatar-circle-option selected" data-avatar="💻"
+            data-bg="linear-gradient(135deg, #0284c7, #2563eb)"
+            style="background: linear-gradient(135deg, #0284c7, #2563eb);">💻</div>
+          <div class="avatar-circle-option" data-avatar="🚀" data-bg="linear-gradient(135deg, #f97316, #ea580c)"
+            style="background: linear-gradient(135deg, #f97316, #ea580c);">🚀</div>
+          <div class="avatar-circle-option" data-avatar="🐱" data-bg="linear-gradient(135deg, #a855f7, #7c3aed)"
+            style="background: linear-gradient(135deg, #a855f7, #7c3aed);">🐱</div>
+          <div class="avatar-circle-option" data-avatar="🤖" data-bg="linear-gradient(135deg, #0d9488, #0f766e)"
+            style="background: linear-gradient(135deg, #0d9488, #0f766e);">🤖</div>
+          <div class="avatar-circle-option" data-avatar="🦊" data-bg="linear-gradient(135deg, #eab308, #ca8a04)"
+            style="background: linear-gradient(135deg, #eab308, #ca8a04);">🦊</div>
+          <div class="avatar-circle-option" data-avatar="🥷" data-bg="linear-gradient(135deg, #475569, #334155)"
+            style="background: linear-gradient(135deg, #475569, #334155);">🥷</div>
+          <div class="avatar-circle-option" data-avatar="🦖" data-bg="linear-gradient(135deg, #22c55e, #16a34a)"
+            style="background: linear-gradient(135deg, #22c55e, #16a34a);">🦖</div>
+          <div class="avatar-circle-option" data-avatar="🦄" data-bg="linear-gradient(135deg, #ec4899, #db2777)"
+            style="background: linear-gradient(135deg, #ec4899, #db2777);">🦄</div>
+        </div>
+      </div>
+
+      <!-- GÜNÜN ENLERİ KÜRSÜ KARTI -->
+      <div class="card leaderboard-card">
+        <div class="leaderboard-title">GÜNÜN ENLERİ</div>
+        <div class="podium-container">
+          <!-- 2. Sıra -->
+          <div class="podium-place second">
+            <div class="podium-avatar" id="podium-avatar-2">💻</div>
+            <span class="podium-name" id="podium-name-2">salihfMnX</span>
+            <div class="podium-block">
+              <span class="podium-num">2</span>
+            </div>
+          </div>
+          <!-- 1. Sıra -->
+          <div class="podium-place first">
+            <div class="podium-crown">👑</div>
+            <div class="podium-avatar" id="podium-avatar-1">🚀</div>
+            <span class="podium-name" id="podium-name-1">yakamozzCksm</span>
+            <div class="podium-block">
+              <span class="podium-num">1</span>
+            </div>
+          </div>
+          <!-- 3. Sıra -->
+          <div class="podium-place third">
+            <div class="podium-avatar" id="podium-avatar-3">🐱</div>
+            <span class="podium-name" id="podium-name-3">mert31ci</span>
+            <div class="podium-block">
+              <span class="podium-num">3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KOD GİRİŞ VE ODA KATILMA ALANI -->
+      <div class="code-join-card">
+        <div class="code-input-wrapper">
+          <input type="text" id="input-room-id" placeholder="K  O  D" />
+          <button id="btn-join-room" class="play-arrow-btn"><svg viewBox="0 0 24 24" width="24" height="24"
+              fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg></button>
+        </div>
+        <p class="code-subtext">Kodunuz mu yok?<br>Sorun değil. İstediğiniz bir modda bir oyun başlatabilirsiniz.</p>
+      </div>
+
+      <!-- LOBİ AYARLARI (DİL VE SERİ SEÇİMİ) -->
+      <div class="lobby-settings-row">
+        <!-- DİL SEÇİM KUTUSU -->
+        <div class="language-selection">
+          <label for="select-language">💻 Yarışılacak Yazılım Dili:</label>
+          <select id="select-language" class="custom-select">
+            <option value="ALL">🔀 Karışık (Tüm Diller)</option>
+            <option value="JS">🟨 JavaScript</option>
+            <option value="PY">🐍 Python</option>
+            <option value="CPP">🔷 C++</option>
+            <option value="HTML">🌐 HTML / CSS</option>
+            <option value="CS">🔷 C#</option>
+            <option value="JAVA">☕ Java</option>
+          </select>
+        </div>
+
+        <!-- SERİ SEÇİMİ -->
+        <div class="language-selection">
+          <label for="select-series">🏆 Maç Serisi:</label>
+          <select id="select-series" class="custom-select">
+            <option value="single">⚡ Tek Maç</option>
+            <option value="bo3">🥇 Best of 3 (2 Galibiyet)</option>
+            <option value="bo5">🏆 Best of 5 (3 Galibiyet)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- OYUN MOD KARTLARI (SOLO VE ÇOK OYUNCULU) -->
+      <div class="mode-cards-row">
+        <!-- ZARTA MODU (SOLO) -->
+        <div class="mode-card zarta" id="btn-solo">
+          <div class="mode-card-icon">⚡</div>
+          <span class="mode-card-title">OYUN MODU</span>
+          <span class="mode-card-desc">Kendi rekorunu kır</span>
+        </div>
+
+        <!-- ARKADAŞ MODU (MULTIPLAYER) -->
+        <div class="mode-card friend" id="btn-create-room">
+          <div class="mode-card-icon">👥</div>
+          <span class="mode-card-title">ARKADAŞ MODU</span>
+          <span class="mode-card-desc">Yeni oda aç ve yarış</span>
+        </div>
+      </div>
+
+      <p id="room-status" class="status-text"></p>
+    </div>
+
+    <!-- ODA ID PAYLAŞIM ALANI -->
+    <div id="room-info-card" class="card hidden">
+      <h3>Oda Oluşturuldu! 🎮</h3>
+      <p>Arkadaşına bu ID'yi göndererek oyuna davet et:</p>
+      <div class="share-box">
+        <input type="text" id="display-room-id" readonly />
+        <button id="btn-copy-id" class="btn action">📋 Davet Linkini Kopyala</button>
+      </div>
+      <div class="loading-spinner">
+        <p class="status-text warning">⏳ Rakip odaya katılmayı bekliyor...</p>
+      </div>
+      <button id="btn-leave-room" class="btn-link">İptal Et / Ana Menüye Dön</button>
+    </div>
+
+    <!-- YARIŞ EKRANI -->
+    <div id="race-card" class="card hidden">
+      <!-- GERİ SAYIM OVERLAY -->
+      <div id="countdown-overlay" class="overlay hidden">
+        <span id="countdown-number">3</span>
+      </div>
+
+      <!-- SERİ SKOR TABELASI -->
+      <div id="series-score-box" class="series-score-box hidden">
+        <span id="score-mode-label" class="score-mode-label">BEST OF 3</span>
+        <div class="score-display">
+          <span id="my-score-display" class="score-num">0</span>
+          <span class="score-dash">-</span>
+          <span id="opponent-score-display" class="score-num">0</span>
+        </div>
+      </div>
+
+      <!-- CANLI İLERLEME ÇUBUKLARI -->
+      <div class="progress-section">
+        <div class="progress-container">
+          <div class="player-info-badge my-badge">
+            <span id="my-avatar-display" class="player-avatar-mini"
+              style="background: linear-gradient(135deg, #0284c7, #2563eb);">💻</span>
+            <span id="my-name-display" class="player-name-label">SEN</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="my-progress" class="progress-bar my-bar"></div>
+          </div>
+        </div>
+        <div id="opponent-progress-box" class="progress-container hidden">
+          <div class="player-info-badge opponent-badge">
+            <span id="opponent-avatar-display" class="player-avatar-mini"
+              style="background: linear-gradient(135deg, #ef4444, #b91c1c);">🤖</span>
+            <span id="opponent-name-display" class="player-name-label">RAKİP</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="opponent-progress" class="progress-bar opponent-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <p id="opponent-finished-note" class="status-text warning hidden">⚡ Rakip bitirdi! Hızlan!</p>
+
+      <!-- CANLI İSTATİSTİKLER -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-value" id="stat-wpm">0.0</span>
+          <span class="stat-title">SÜRE</span>
+          <span class="stat-desc">Saniye</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" id="stat-cpm">0</span>
+          <span class="stat-title">CPM</span>
+          <span class="stat-desc">Karakter / Dk</span>
+        </div>
+        <div class="stat-item error-item">
+          <span class="stat-value" id="stat-errors">0</span>
+          <span class="stat-title">HATA</span>
+          <span class="stat-desc">Yanlış Tuş</span>
+        </div>
+      </div>
+
+      <!-- KOD YAZMA ALANI -->
+      <div id="code-display" class="code-box"></div>
+      <textarea id="code-input" placeholder="Yazmaya başlamak için buraya tıklayın..." disabled></textarea>
+
+      <button id="btn-leave-race" class="btn-link">✕ Ana Menüye Dön</button>
+    </div>
+
+    <!-- SONUÇ EKRANI -->
+    <div id="result-card" class="card hidden">
+      <h2 id="result-title">Tebrikler! 🎉</h2>
+
+      <!-- SONUÇ PROFİLLERİ -->
+      <div class="result-profiles-showcase">
+        <div class="res-profile-box" id="res-my-profile">
+          <div class="avatar-circle-large" id="res-my-avatar"
+            style="background: linear-gradient(135deg, #0284c7, #2563eb);">💻</div>
+          <span class="res-player-name" id="res-my-name">Yarışçı</span>
+        </div>
+        <div class="res-vs-container" id="res-vs-container">
+          <div class="res-vs-divider hidden" id="res-vs">VS</div>
+          <div id="res-series-score" class="res-series-score hidden">0 - 0</div>
+        </div>
+        <div class="res-profile-box hidden" id="res-opponent-profile">
+          <div class="avatar-circle-large" id="res-opponent-avatar"
+            style="background: linear-gradient(135deg, #ef4444, #b91c1c);">🤖</div>
+          <span class="res-player-name" id="res-opponent-name">Rakip</span>
+        </div>
+      </div>
+
+      <div class="result-stats">
+        <div class="res-card">
+          <span class="res-num" id="res-wpm">0.0</span>
+          <span class="res-label">Süre (Saniye)</span>
+        </div>
+        <div class="res-card">
+          <span class="res-num" id="res-cpm">0</span>
+          <span class="res-label">CPM (Karakter/Dk)</span>
+        </div>
+        <div class="res-card">
+          <span class="res-num" id="res-errors">0</span>
+          <span class="res-label">Hata Sayısı</span>
+        </div>
+      </div>
+      <div class="result-actions">
+        <!-- SERİ / RÖVANŞ AKSIYONLARI -->
+        <button id="btn-next-round" class="btn primary btn-large hidden">🎮 SONRAKİ RAUNDA GEÇ</button>
+        <button id="btn-rematch" class="btn action btn-large hidden">🔥 RÖVANŞ TEKLİF ET</button>
+
+        <div id="rematch-request-box" class="rematch-request-box hidden">
+          <p id="rematch-request-text">Rakip seninle rövanş yapmak istiyor! ⚔️</p>
+          <div class="rematch-btn-row">
+            <button id="btn-accept-rematch" class="btn primary">Kabul Et ✅</button>
+            <button id="btn-decline-rematch" class="btn secondary">Reddet ✕</button>
+          </div>
+        </div>
+
+        <button id="btn-restart-solo" class="btn primary btn-large">🔄 TEKRAR DENE</button>
+        <button id="btn-challenge-friend" class="btn secondary btn-large">🔥 SKORUNU ARKADAŞINLA YARIŞTIR</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <!-- LOGO -->
+      <div class="footer-logo">
+        <svg class="droplet-logo" viewBox="0 0 100 100" width="48" height="48">
+          <rect width="100" height="100" rx="22" fill="#090d16" stroke="#131c2e" stroke-width="4" />
+          <path d="M 42,22 C 34,22 32,32 32,37 C 32,43 27,47 24,50 C 27,53 32,57 32,63 C 32,68 34,78 42,78" fill="none"
+            stroke="#38bdf8" stroke-width="7" stroke-linecap="round" />
+          <path d="M 58,22 C 66,22 68,32 68,37 C 68,43 73,47 76,50 C 73,53 68,57 68,63 C 68,68 66,78 58,78" fill="none"
+            stroke="#38bdf8" stroke-width="7" stroke-linecap="round" />
+          <defs>
+            <linearGradient id="grad-footer" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#22c55e" />
+              <stop offset="100%" stop-color="#38bdf8" />
+            </linearGradient>
+          </defs>
+          <rect x="46" y="37" width="8" height="26" rx="4" fill="url(#grad-footer)" />
+        </svg>
+        <span class="logo-text">DevRacer</span>
+      </div>
+
+      <!-- SOCIAL MEDIA -->
+      <div class="footer-socials">
+        <!-- LinkedIn -->
+        <a href="https://linkedin.com" target="_blank" class="social-link" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg></a>
+        <!-- GitHub -->
+        <a href="https://github.com" target="_blank" class="social-link" title="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg></a>
+      </div>
+
+      <!-- FOOTER LINKS -->
+      <div class="footer-links">
+        <a href="#" id="link-privacy">Gizlilik Politikası</a>
+        <a href="#" id="link-terms">Kullanıcı Sözleşmesi</a>
+        <a href="#" id="link-cookies">Çerezler</a>
+        <a href="#" id="link-contact">İletişim</a>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <p class="footer-description">
+        DevRacer kullanıcılarına birçok farklı konuda eğitim ve uygulama hazırlayan sitedir.<br>
+        Hazırlanan içerikler devamlı kontrol edilmektedir, fakat DevRacer bilgilerinin tamamen doğru olduğunu kabul
+        etmez.<br>
+        Sitede bulunan hiçbir içerik kaynak belirtilse dahi kopyalanamaz ve yayınlanamaz.
+      </p>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="footer-bottom">
+      Tüm hakları saklıdır. 2012 - 2026 DevRacer
+    </div>
+  </footer>
+
+  <!-- DÖKÜMAN MODALLARI -->
+  <div id="footer-modal" class="modal-overlay hidden">
+    <div class="modal-content card">
+      <button id="modal-close" class="modal-close-btn">&times;</button>
+      <h2 id="modal-title">Başlık</h2>
+      <div id="modal-body" class="modal-body-content"></div>
+    </div>
+  </div>
+
+  <!-- ÇEREZ ONAY BANNERI -->
+  <div id="cookie-consent-banner" class="cookie-banner hidden">
+    <div class="cookie-banner-content">
+      <span>🍪 Deneyiminizi geliştirmek ve yarış ayarlarınızı (isim, rekor) tarayıcınızda saklamak için yerel çerezleri
+        kullanıyoruz. <a href="#" id="cookie-more-info">Detaylı Bilgi</a></span>
+      <button id="btn-accept-cookies" class="btn primary">Kabul Et ✅</button>
+    </div>
+  </div>
+
+
+
+  <script src="database.js"></script>
+  <script src="multiplayer.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

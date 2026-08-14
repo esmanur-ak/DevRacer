@@ -1,0 +1,377 @@
+/* İLERLEME ÇUBUKLARI */
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.player-label {
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  min-width: 65px;
+  text-align: center;
+}
+
+.my-label { background: #0284c7; color: #fff; }
+.opponent-label { background: #ef4444; color: #fff; }
+
+.progress-bar-bg {
+  flex: 1;
+  height: 16px;
+  background: #090d16;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #1e293b;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  transition: width 0.15s ease-out;
+}
+
+.my-bar { background: linear-gradient(90deg, #38bdf8, #0284c7); }
+.opponent-bar { background: linear-gradient(90deg, #f87171, #ef4444); }
+
+/* İSTATİSTİK KARTLARI */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  background: #090d16;
+  padding: 0.8rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #1e293b;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.stat-title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.stat-desc {
+  display: block;
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.stat-item.error-item .stat-value { color: #f87171; }
+
+/* KOD EKRANI */
+.code-box {
+  background: #090d16;
+  padding: 1.25rem;
+  border-radius: 12px;
+  line-height: 1.7;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+  word-break: normal;
+  overflow-wrap: anywhere;
+  border: 1px solid #1e293b;
+}
+
+.char-correct { color: #4ade80; }
+.char-incorrect { color: #f87171; background: rgba(248, 113, 113, 0.2); border-radius: 2px; }
+.char-current { border-bottom: 3px solid #38bdf8; animation: blink 0.8s infinite; }
+
+@keyframes blink { 50% { border-color: transparent; } }
+
+textarea {
+  width: 100%;
+  height: 90px;
+  background: #090d16;
+  color: #fff;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 1rem;
+  resize: none;
+  outline: none;
+}
+textarea:focus { border-color: #38bdf8; }
+
+/* SONUÇ EKRANI */
+.result-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.res-card {
+  background: #090d16;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.res-num {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fbbf24;
+}
+
+.res-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* SONUÇ PROFİLLERİ GÖSTERİMİ */
+.result-profiles-showcase {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(9, 13, 22, 0.6);
+  border-radius: 16px;
+  border: 1px solid #1e293b;
+}
+
+.res-profile-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar-circle-large {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.res-player-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #f1f5f9;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.res-vs-divider {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #64748b;
+  background: #1e293b;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+}
+
+.res-vs-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.res-series-score {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #fbbf24;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+  background: #090d16;
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+/* SERİ SKOR TABELASI */
+.series-score-box {
+  background: #090d16;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.score-mode-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fbbf24;
+  letter-spacing: 1px;
+}
+
+.score-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.score-num {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #38bdf8;
+}
+
+.score-dash {
+  font-size: 1.4rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+/* RÖVANŞ TEKLİFİ ALANI */
+.rematch-request-box {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  padding: 1.25rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0% { border-color: rgba(139, 92, 246, 0.4); }
+  50% { border-color: rgba(139, 92, 246, 0.8); }
+  100% { border-color: rgba(139, 92, 246, 0.4); }
+}
+
+.rematch-request-box p {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #c084fc;
+  margin-bottom: 0.75rem;
+}
+
+.rematch-btn-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.rematch-btn-row .btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  flex: 1;
+  max-width: 150px;
+}
+
+/* MOBİL YARIŞ EKRANI MEDYA SORGULARI */
+@media (max-width: 600px) {
+  /* İlerleme Çubukları & Rozetleri */
+  .progress-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .player-info-badge {
+    max-width: 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  /* Canlı İstatistikler ve Sonuç İstatistikleri */
+  .stats-bar, .result-stats {
+    gap: 0.5rem;
+  }
+  
+  .stat-item, .res-card {
+    padding: 0.6rem 0.4rem;
+    border-radius: 8px;
+  }
+  
+  .stat-value, .res-num {
+    font-size: 1.3rem;
+  }
+  
+  .stat-title, .res-label {
+    font-size: 0.75rem;
+  }
+  
+  .stat-desc {
+    font-size: 0.6rem;
+  }
+
+  /* Kod Ekranı ve Yazma Kutusu */
+  .code-box {
+    font-size: 0.95rem;
+    padding: 0.85rem;
+    line-height: 1.5;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  textarea {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    height: 75px;
+  }
+
+  /* Sonuç Ekranı Oyuncu Karşılaştırması */
+  .result-profiles-showcase {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0.75rem;
+  }
+  
+  .res-vs-container {
+    flex-direction: row;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  
+  .avatar-circle-large {
+    width: 56px;
+    height: 56px;
+    font-size: 1.8rem;
+  }
+  
+  .res-player-name {
+    font-size: 0.95rem;
+    max-width: 120px;
+  }
+
+  .res-series-score {
+    font-size: 1.3rem;
+    padding: 0.2rem 0.75rem;
+  }
+}
+

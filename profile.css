@@ -1,0 +1,112 @@
+/* PROFİL TANIMLAMA ARAYÜZÜ */
+.profile-setup {
+  background: #090d16;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.profile-setup label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 0.75rem;
+}
+
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.avatar-circle-preview {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+  border: 2px solid #38bdf8;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.avatar-picker-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.5rem;
+}
+
+.avatar-circle-option {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.avatar-circle-option:hover {
+  transform: scale(1.15);
+}
+
+.avatar-circle-option.selected {
+  border-color: #f1f5f9;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(241, 245, 249, 0.5);
+}
+
+/* YARIŞ EKRANI PROFİL BİLGİLERİ */
+.player-info-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(2, 132, 199, 0.2);
+  border: 1px solid rgba(2, 132, 199, 0.4);
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  min-width: 130px;
+  max-width: 180px;
+}
+
+.player-info-badge.opponent-badge {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.player-avatar-mini {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.player-name-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
