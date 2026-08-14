@@ -1,78 +1,137 @@
 // OYUN VE PEERJS DURUM DEĞİŞKENLERİ
 let peer = null;
-let conn = null;
+let conn = null; // Client için host bağlantısı
+let connections = []; // Host için bağlanan tüm client'lar
 let isHost = false;
 let isMultiplayer = false;
 
-// Multiplayer bitiş anlaşmazlığını (race condition) çözmek için:
-// her iki oyuncu da bitirene kadar kazananı KESİNLEŞTİRMİYORUZ.
-let myFinishData = null;
-let opponentFinishData = null;
+// Multiplayer oyuncu listesi ve yarış verileri
+let roomPlayers = {}; // peerId -> { name, avatar, bg }
+let playerProgress = {}; // peerId -> percent (0-100)
+let playerFinishData = {}; // peerId -> { stats, elapsedMs }
 
-// SERİ VE RÖVANŞ DURUMLARI
+// SERİ VE RÖVANŞ DURUMLARI (Multiplayer serisi host tarafından yönetilir)
 let matchMode = 'single'; // 'single', 'bo3', 'bo5'
-let myWins = 0;
-let opponentWins = 0;
-let myNextRoundReady = false;
-let opponentNextRoundReady = false;
+let playerWins = {}; // peerId -> win count
+let playerNextRoundReady = {}; // peerId -> boolean
 
-// 10. PEERJS VE MULTIPLAYER MANTIĞI
+// 4 Haneli Oda Kodu Üretici (2-5 karakter arası)
+function generateRoomId() {
+  return Math.floor(1000 + Math.random() * 9000).toString(); // 4 haneli sayısal kod
+}
+
 function initPeer(customId = null) {
-  const peerId = customId || 'csr-' + Math.random().toString(36).substring(2, 8);
-  peer = new Peer(peerId);
+  peer = new Peer(customId);
 
   peer.on('error', (err) => {
     console.error('PeerJS Hata:', err);
-    if (roomStatus) roomStatus.innerText = 'Bağlantı hatası oluştu! Tekrar deneyin.';
+    if (roomStatus) {
+      if (err.type === 'unavailable-id') {
+        roomStatus.innerText = 'Bu Oda ID zaten kullanımda! Başka bir ID deneyin.';
+      } else {
+        roomStatus.innerText = 'Bağlantı hatası oluştu! Tekrar deneyin.';
+      }
+    }
   });
 
-  return peerId;
+  return customId;
 }
 
-function setupConnectionListeners() {
-  conn.on('open', () => {
-    // Send my profile details immediately upon connection
-    sendPeerData({ type: 'SHARE_PROFILE', profile: myProfile });
-    if (isHost) {
-      matchMode = selectSeries.value;
-      sendPeerData({ type: 'SET_MATCH_MODE', mode: matchMode });
-    }
+function setupConnectionListeners(connection) {
+  connection.on('open', () => {
+    // Katılımcı için lobi ekranına geçiş yap
     if (!isHost) {
-      prepareMultiplayerRace();
+      const lobbyCardEl = document.getElementById('lobby-card');
+      const roomInfoCardEl = document.getElementById('room-info-card');
+      const displayRoomIdEl = document.getElementById('display-room-id');
+      const roomInfoTitleEl = document.getElementById('room-info-title');
+      const inputRoomIdEl = document.getElementById('input-room-id');
+
+      if (lobbyCardEl) lobbyCardEl.classList.add('hidden');
+      if (roomInfoCardEl) roomInfoCardEl.classList.remove('hidden');
+      if (displayRoomIdEl && inputRoomIdEl) {
+        displayRoomIdEl.value = inputRoomIdEl.value.trim();
+      }
+      if (roomInfoTitleEl) {
+        roomInfoTitleEl.innerText = "Odaya Katılındı! 🎮";
+      }
+    }
+
+    // Profil bilgisini hemen gönder
+    connection.send({ 
+      type: 'SHARE_PROFILE', 
+      profile: myProfile, 
+      peerId: peer.id 
+    });
+
+    if (isHost) {
+      // Host olarak yeni bağlanana oyun ayarlarını gönder
+      connection.send({ type: 'SET_MATCH_MODE', mode: matchMode });
+      
+      // Host olarak tüm oyuncuların listesini güncelle ve herkese dağıt
+      roomPlayers[peer.id] = myProfile;
+      broadcastPlayersList();
     }
   });
 
-  conn.on('data', (data) => {
-    handleIncomingData(data);
+  connection.on('data', (data) => {
+    handleIncomingData(data, connection);
   });
 
-  conn.on('close', () => {
+  connection.on('close', () => {
+    handleConnectionClose(connection);
+  });
+}
+
+function handleConnectionClose(closedConn) {
+  if (isHost) {
+    // Kapanan bağlantıyı listeden çıkar
+    connections = connections.filter(c => c !== closedConn);
+    // Hangi peer ayrıldı bulalım
+    let leftPeerId = null;
+    for (let peerId in roomPlayers) {
+      if (peerId !== peer.id && !connections.some(c => c.peer === peerId)) {
+        leftPeerId = peerId;
+        break;
+      }
+    }
+    if (leftPeerId) {
+      delete roomPlayers[leftPeerId];
+      delete playerProgress[leftPeerId];
+      delete playerFinishData[leftPeerId];
+      broadcastPlayersList();
+      updateLobbyPlayersUI();
+    }
+  } else {
+    // Client isek ve host ile bağlantı koptuysa lobiye dön
     if (isMultiplayer) {
-      alert('Rakip oyundan ayrıldı!');
+      alert('Oda sahibi oyundan ayrıldı veya bağlantı koptu!');
       leaveToLobby();
     }
-  });
+  }
 }
 
-// Sekme kapatılırken/refresh edilirken rakibe haber ver (mümkün olduğunca).
+// Sekme kapatılırken rakibe haber ver
 window.addEventListener('beforeunload', () => {
-  if (isMultiplayer) sendPeerData({ type: 'LEAVE' });
+  if (isMultiplayer) {
+    sendPeerData({ type: 'LEAVE', peerId: peer.id });
+  }
 });
 
-// Odayı/oyunu tamamen terk et: PeerJS bağlantısını kapat, tüm durumu sıfırla, lobiye dön.
 function leaveToLobby() {
   isMultiplayer = false;
   isHost = false;
   isGameActive = false;
-  myFinishData = null;
-  opponentFinishData = null;
+  
+  // Durumları sıfırla
+  roomPlayers = {};
+  playerProgress = {};
+  playerFinishData = {};
+  playerWins = {};
+  playerNextRoundReady = {};
+  
+  connections = [];
   clearInterval(timerInterval);
-
-  // Seri ve rövanş durumlarını sıfırla
-  myWins = 0;
-  opponentWins = 0;
-  myNextRoundReady = false;
-  opponentNextRoundReady = false;
 
   if (conn) {
     try { conn.close(); } catch (e) {}
@@ -88,48 +147,43 @@ function leaveToLobby() {
   resultCard.classList.add('hidden');
   lobbyCard.classList.remove('hidden');
   roomStatus.innerText = '';
+  
   const note = document.getElementById('opponent-finished-note');
   if (note) note.classList.add('hidden');
 
-  // Katılma alanındaki URL'i temizle ki tekrar aynı odaya otomatik girmeye çalışmasın.
+  // URL'deki parametreyi temizle
   if (window.location.search) {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
 }
 
-function handleIncomingData(data) {
+function handleIncomingData(data, senderConn) {
   switch (data.type) {
+    case 'ROOM_FULL':
+      alert('Oda dolu! (En fazla 5 kişi katılabilir)');
+      leaveToLobby();
+      break;
+
     case 'SET_MATCH_MODE':
       matchMode = data.mode;
       break;
 
-    case 'REMATCH_REQUEST':
-      rematchRequestBox.classList.remove('hidden');
-      rematchRequestText.innerText = `${opponentProfile.name} seninle rövanş yapmak istiyor! ⚔️`;
-      break;
-
-    case 'REMATCH_ANSWER':
-      if (data.answer === 'accept') {
-        startNewSeries();
-      } else {
-        alert('Rakip rövanş teklifini reddetti.');
-        leaveToLobby();
-      }
-      break;
-
-    case 'ROUND_READY':
-      opponentNextRoundReady = true;
-      checkNextRoundTransition();
-      break;
-
     case 'SHARE_PROFILE':
-      opponentProfile = data.profile;
-      updateOpponentUIProfile();
+      roomPlayers[data.peerId] = data.profile;
+      if (isHost) {
+        broadcastPlayersList();
+      }
+      updateLobbyPlayersUI();
       break;
 
-    case 'INIT_GAME':
+    case 'ROOM_PLAYERS_UPDATE':
+      roomPlayers = data.players;
+      updateLobbyPlayersUI();
+      break;
+
+    case 'START_GAME':
       currentText = data.code;
-      renderCodeDisplay();
+      prepareMultiplayerRace();
       break;
 
     case 'COUNTDOWN':
@@ -146,42 +200,97 @@ function handleIncomingData(data) {
       break;
 
     case 'PROGRESS':
-      opponentProgressBar.style.width = `${data.percent}%`;
+      // Host progress alırsa herkese dağıtır
+      if (isHost) {
+        playerProgress[data.peerId] = data.percent;
+        sendPeerData({ type: 'PROGRESS_UPDATE', peerId: data.peerId, percent: data.percent });
+        updateRaceProgressUI();
+      }
+      break;
+
+    case 'PROGRESS_UPDATE':
+      playerProgress[data.peerId] = data.percent;
+      updateRaceProgressUI();
       break;
 
     case 'FINISHED':
-      opponentFinishData = { stats: data.stats, elapsedMs: data.elapsedMs };
+      if (isHost) {
+        playerFinishData[data.peerId] = { stats: data.stats, elapsedMs: data.elapsedMs };
+        sendPeerData({ type: 'PLAYER_FINISHED', peerId: data.peerId, stats: data.stats, elapsedMs: data.elapsedMs });
+        resolveMultiplayerOutcome();
+      }
+      break;
+
+    case 'PLAYER_FINISHED':
+      playerFinishData[data.peerId] = { stats: data.stats, elapsedMs: data.elapsedMs };
       resolveMultiplayerOutcome();
       break;
 
     case 'LEAVE':
-      handleOpponentLeft();
+      if (isHost) {
+        handleConnectionClose(senderConn);
+      } else {
+        if (data.peerId === 'host') {
+          alert('Oda sahibi odadan ayrıldı.');
+          leaveToLobby();
+        } else {
+          delete roomPlayers[data.peerId];
+          delete playerProgress[data.peerId];
+          delete playerFinishData[data.peerId];
+          updateLobbyPlayersUI();
+        }
+      }
+      break;
+
+    case 'ROUND_READY':
+      playerNextRoundReady[data.peerId] = true;
+      if (isHost) {
+        checkNextRoundTransition();
+      }
+      break;
+
+    case 'ROUND_TRANSITION':
+      currentText = data.code;
+      prepareMultiplayerRace();
+      break;
+
+    case 'REMATCH_REQUEST':
+      rematchRequestBox.classList.remove('hidden');
+      rematchRequestText.innerText = `Yarışmacılar rövanş yapmak istiyor! ⚔️`;
+      break;
+
+    case 'REMATCH_ANSWER':
+      if (data.answer === 'accept') {
+        startNewSeries();
+      } else {
+        alert('Rövanş teklifi reddedildi.');
+        leaveToLobby();
+      }
       break;
   }
 }
 
-function handleOpponentLeft() {
-  if (!isMultiplayer) return;
-  alert('Rakip odadan ayrıldı.');
-  leaveToLobby();
-}
-
+// Host'un tüm client'lara veri göndermesi veya client'ın host'a göndermesi
 function sendPeerData(data) {
-  if (conn && conn.open) {
-    conn.send(data);
+  if (isHost) {
+    connections.forEach(c => {
+      if (c && c.open) {
+        c.send(data);
+      }
+    });
+  } else {
+    if (conn && conn.open) {
+      conn.send(data);
+    }
   }
 }
 
-function checkNextRoundTransition() {
-  if (myNextRoundReady && opponentNextRoundReady) {
-    prepareMultiplayerRace();
+// Sadece Host tarafından oyuncu listesini herkese yayınlamak için kullanılır
+function broadcastPlayersList() {
+  if (isHost) {
+    sendPeerData({
+      type: 'ROOM_PLAYERS_UPDATE',
+      players: roomPlayers
+    });
   }
-}
-
-function startNewSeries() {
-  myWins = 0;
-  opponentWins = 0;
-  myNextRoundReady = false;
-  opponentNextRoundReady = false;
-  prepareMultiplayerRace();
 }

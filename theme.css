@@ -294,7 +294,7 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 5rem;
+  font-size: 3.5rem;
   font-weight: 900;
   color: #38bdf8;
   border-radius: 16px;
@@ -1024,6 +1024,11 @@ input[type="text"]:focus {
   .footer-description {
     font-size: 0.75rem;
     text-align: justify;
+  }
+
+  /* Mobil Geri Sayım Metin Boyutu */
+  .overlay {
+    font-size: 2.2rem;
   }
 }
 

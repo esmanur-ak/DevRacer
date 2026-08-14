@@ -147,15 +147,28 @@
     </div>
 
     <!-- ODA ID PAYLAŞIM ALANI -->
-    <div id="room-info-card" class="card hidden">
-      <h3>Oda Oluşturuldu! 🎮</h3>
-      <p>Arkadaşına bu ID'yi göndererek oyuna davet et:</p>
+    <div id="room-info-card" class="card room-info-container hidden">
+      <h3 id="room-info-title">Oda Oluşturuldu! 🎮</h3>
+      <p>Arkadaşlarılana bu ID'yi göndererek oyuna davet et (En fazla 5 kişi):</p>
       <div class="share-box">
-        <input type="text" id="display-room-id" readonly />
+        <input type="text" id="display-room-id" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px; font-weight: 800;" readonly />
         <button id="btn-copy-id" class="btn action">📋 Davet Linkini Kopyala</button>
       </div>
-      <div class="loading-spinner">
-        <p class="status-text warning">⏳ Rakip odaya katılmayı bekliyor...</p>
+
+      <!-- KATILAN OYUNCULARIN LİSTESİ -->
+      <div class="connected-players-box" style="background: rgba(9, 13, 22, 0.6); padding: 1rem; border-radius: 12px; border: 1px solid #1e293b; margin: 1rem 0; text-align: left;">
+        <div style="font-weight: 800; color: #38bdf8; font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between;">
+          <span>👤 KATILAN OYUNCULAR:</span>
+          <span id="player-count-badge" style="background: #1e293b; padding: 0.1rem 0.5rem; border-radius: 8px; font-size: 0.8rem; color: #94a3b8;">1/5</span>
+        </div>
+        <div id="room-player-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <!-- Dinamik oyuncu listesi buraya eklenecektir -->
+        </div>
+      </div>
+
+      <div class="loading-spinner" style="margin-top: 1.5rem;">
+        <p id="waiting-status-text" class="status-text warning">⏳ Diğer oyuncuların katılması bekleniyor...</p>
+        <button id="btn-start-multiplayer-game" class="btn primary btn-large hidden" style="margin-top: 0.5rem;">🚀 Oyunu Başlat</button>
       </div>
       <button id="btn-leave-room" class="btn-link">İptal Et / Ana Menüye Dön</button>
     </div>
@@ -178,27 +191,8 @@
       </div>
 
       <!-- CANLI İLERLEME ÇUBUKLARI -->
-      <div class="progress-section">
-        <div class="progress-container">
-          <div class="player-info-badge my-badge">
-            <span id="my-avatar-display" class="player-avatar-mini"
-              style="background: linear-gradient(135deg, #0284c7, #2563eb);">💻</span>
-            <span id="my-name-display" class="player-name-label">SEN</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div id="my-progress" class="progress-bar my-bar"></div>
-          </div>
-        </div>
-        <div id="opponent-progress-box" class="progress-container hidden">
-          <div class="player-info-badge opponent-badge">
-            <span id="opponent-avatar-display" class="player-avatar-mini"
-              style="background: linear-gradient(135deg, #ef4444, #b91c1c);">🤖</span>
-            <span id="opponent-name-display" class="player-name-label">RAKİP</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div id="opponent-progress" class="progress-bar opponent-bar"></div>
-          </div>
-        </div>
+      <div class="progress-section" id="progress-section">
+        <!-- İlerleme çubukları Javascript tarafından dinamik olarak oluşturulacak -->
       </div>
 
       <p id="opponent-finished-note" class="status-text warning hidden">⚡ Rakip bitirdi! Hızlan!</p>

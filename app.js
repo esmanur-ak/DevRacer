@@ -133,20 +133,32 @@ function getRandomCodeByLanguage() {
 // 3. SOLO OYUNU BAŞLAT
 function startSoloGame() {
   isMultiplayer = false;
-  document.getElementById('opponent-progress-box').classList.add('hidden');
   
   lobbyCard.classList.add('hidden');
   resultCard.classList.add('hidden');
   raceCard.classList.remove('hidden');
 
-  // Set my profile info on badge
-  document.getElementById('my-avatar-display').innerText = myProfile.avatar;
-  document.getElementById('my-avatar-display').style.background = myProfile.bg;
-  document.getElementById('my-name-display').innerText = myProfile.name;
-
+  prepareSoloRaceUI();
   resetRaceState();
   codeInput.disabled = false;
   codeInput.focus();
+}
+
+function prepareSoloRaceUI() {
+  const progressSection = document.getElementById('progress-section');
+  if (progressSection) {
+    progressSection.innerHTML = `
+      <div class="progress-container">
+        <div class="player-info-badge my-badge">
+          <span class="player-avatar-mini" style="background: ${myProfile.bg};">${myProfile.avatar}</span>
+          <span class="player-name-label">${myProfile.name} (Sen)</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="my-progress" class="progress-bar my-bar"></div>
+        </div>
+      </div>
+    `;
+  }
 }
 
 // 4. YARIŞ DURUMUNU SIFIRLA
@@ -164,8 +176,8 @@ function resetRaceState() {
   currentText = getRandomCodeByLanguage();
   
   codeInput.value = "";
-  myProgressBar.style.width = "0%";
-  if (opponentProgressBar) opponentProgressBar.style.width = "0%";
+  const myBar = document.getElementById('my-progress');
+  if (myBar) myBar.style.width = "0%";
   statWpm.innerText = "0.0";
   statCpm.innerText = "0";
   statErrors.innerText = "0";
@@ -212,10 +224,12 @@ codeInput.addEventListener('input', () => {
     100,
     Math.floor((typedValue.length / currentText.length) * 100)
   );
-  myProgressBar.style.width = `${progressPercent}%`;
+  
+  const myBar = (isMultiplayer && peer) ? document.getElementById(`progress-bar-${peer.id}`) : document.getElementById('my-progress');
+  if (myBar) myBar.style.width = `${progressPercent}%`;
 
   if (isMultiplayer) {
-    sendPeerData({ type: 'PROGRESS', percent: progressPercent });
+    sendPeerData({ type: 'PROGRESS', percent: progressPercent, peerId: peer.id });
   }
 
   if (typedValue === currentText) {
@@ -455,29 +469,44 @@ function showOpponentFinishedBanner() {
   if (note) note.classList.remove('hidden');
 }
 
-// 10. MULTIPLAYER BAĞLANTI VE ODA KATILIM BUTONLARI (multiplayer.js dosyasındaki PeerJS fonksiyonlarını tetikler)
+// 10. MULTIPLAYER BAĞLANTI VE ODA KATILIM BUTONLARI
 
 btnCreateRoom.addEventListener('click', () => {
   isHost = true;
   isMultiplayer = true;
 
-  const roomId = initPeer();
+  const shortId = generateRoomId();
+  const roomId = 'devracer-' + shortId;
+  initPeer(roomId);
 
   lobbyCard.classList.add('hidden');
   roomInfoCard.classList.remove('hidden');
-  displayRoomId.value = roomId;
+  displayRoomId.value = shortId;
+
+  // Host kendini de odaya ekler
+  roomPlayers[roomId] = myProfile;
+
+  peer.on('open', () => {
+    updateLobbyPlayersUI();
+  });
 
   peer.on('connection', (connection) => {
-    conn = connection;
-    setupConnectionListeners();
-    setTimeout(prepareMultiplayerRace, 1000);
+    if (connections.length >= 4) {
+      connection.on('open', () => {
+        connection.send({ type: 'ROOM_FULL' });
+        setTimeout(() => connection.close(), 500);
+      });
+      return;
+    }
+    connections.push(connection);
+    setupConnectionListeners(connection);
   });
 });
 
 btnJoinRoom.addEventListener('click', () => {
   let targetRoomId = inputRoomId.value.trim();
 
-  // Eğer kullanıcı tam davet linkini yapıştırdıysa, oda ID'sini otomatik ayıkla
+  // Eğer URL kopyalandıysa parametreden ID'yi al
   if (targetRoomId.includes('?room=')) {
     try {
       const urlParams = new URLSearchParams(targetRoomId.split('?')[1]);
@@ -503,51 +532,151 @@ btnJoinRoom.addEventListener('click', () => {
   isHost = false;
   isMultiplayer = true;
 
+  // Kendi peer'ımızı rastgele id ile oluşturalım
   initPeer();
 
   peer.on('open', () => {
     roomStatus.innerText = 'Odaya bağlanılıyor...';
-    conn = peer.connect(targetRoomId);
-    setupConnectionListeners();
+    conn = peer.connect('devracer-' + targetRoomId);
+    setupConnectionListeners(conn);
   });
 });
 
-// Bağlantı dinleyicileri, ayrılma ve tur geçiş fonksiyonları multiplayer.js içerisindedir.
+// Host oyunu başlattığında tetiklenir
+const btnStartGameMulti = document.getElementById('btn-start-multiplayer-game');
+if (btnStartGameMulti) {
+  btnStartGameMulti.addEventListener('click', () => {
+    if (!isHost) return;
+    
+    // Rastgele metni seç
+    currentText = getRandomCodeByLanguage();
+    
+    // Herkese oyunu başlatma emri gönder
+    sendPeerData({ type: 'START_GAME', code: currentText });
+    
+    // Yarışı hazırla ve geri sayımı başlat
+    prepareMultiplayerRace();
+  });
+}
+
+function updateLobbyPlayersUI() {
+  const playerListEl = document.getElementById('room-player-list');
+  const countBadge = document.getElementById('player-count-badge');
+  if (!playerListEl) return;
+  
+  playerListEl.innerHTML = '';
+  const playerIds = Object.keys(roomPlayers);
+  const totalCount = playerIds.length;
+  countBadge.innerText = `${totalCount}/5`;
+
+  playerIds.forEach(id => {
+    const p = roomPlayers[id];
+    const playerRow = document.createElement('div');
+    playerRow.className = 'lobby-player-row';
+    playerRow.style.display = 'flex';
+    playerRow.style.alignItems = 'center';
+    playerRow.style.gap = '0.75rem';
+    playerRow.style.padding = '0.5rem';
+    playerRow.style.borderRadius = '8px';
+    playerRow.style.background = 'rgba(255, 255, 255, 0.05)';
+    playerRow.style.border = '1px solid rgba(255, 255, 255, 0.05)';
+
+    const isMe = id === peer.id;
+    const isRoomHost = id.startsWith('devracer-');
+
+    playerRow.innerHTML = `
+      <div style="background: ${p.bg}; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">${p.avatar}</div>
+      <div style="font-weight: 700; flex: 1; color: #fff;">${p.name} ${isMe ? '<span style="color: #64748b; font-size: 0.8rem; font-weight: 500;">(SEN)</span>' : ''}</div>
+      <div style="font-size: 0.8rem; font-weight: 800; color: #fbbf24;">${isRoomHost ? '👑 Oda Sahibi' : '🎮 Oyuncu'}</div>
+    `;
+    playerListEl.appendChild(playerRow);
+  });
+
+  const startBtn = document.getElementById('btn-start-multiplayer-game');
+  const waitingText = document.getElementById('waiting-status-text');
+  
+  if (isHost) {
+    if (waitingText) waitingText.classList.add('hidden');
+    if (startBtn) {
+      startBtn.classList.remove('hidden');
+      startBtn.disabled = totalCount < 2;
+      if (totalCount < 2) {
+        startBtn.innerText = '⏳ Oyuncular Bekleniyor...';
+        startBtn.style.opacity = '0.6';
+      } else {
+        startBtn.innerText = '🚀 Oyunu Başlat';
+        startBtn.style.opacity = '1';
+      }
+    }
+  } else {
+    if (startBtn) startBtn.classList.add('hidden');
+    if (waitingText) {
+      waitingText.classList.remove('hidden');
+      waitingText.innerText = '⏳ Oda sahibinin oyunu başlatması bekleniyor...';
+    }
+  }
+}
 
 function prepareMultiplayerRace() {
   roomInfoCard.classList.add('hidden');
   lobbyCard.classList.add('hidden');
   raceCard.classList.remove('hidden');
 
-  document.getElementById('opponent-progress-box').classList.remove('hidden');
+  // Skor / Hazır durumları
+  playerProgress = {};
+  playerFinishData = {};
 
-  // Sonraki raunt hazır durumlarını sıfırla
-  myNextRoundReady = false;
-  opponentNextRoundReady = false;
+  // İlerleme çubuklarını dinamik oluştur
+  const progressSection = document.getElementById('progress-section');
+  if (progressSection) {
+    progressSection.innerHTML = '';
+    const playerIds = Object.keys(roomPlayers);
+    playerIds.forEach(id => {
+      const p = roomPlayers[id];
+      const isMe = id === peer.id;
+      
+      const container = document.createElement('div');
+      container.className = 'progress-container';
+      container.id = `progress-container-${id}`;
+      
+      container.innerHTML = `
+        <div class="player-info-badge ${isMe ? 'my-badge' : 'opponent-badge'}">
+          <span class="player-avatar-mini" style="background: ${p.bg};">${p.avatar}</span>
+          <span class="player-name-label">${p.name} ${isMe ? '(Sen)' : ''}</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="progress-bar-${id}" class="progress-bar ${isMe ? 'my-bar' : 'opponent-bar'}"></div>
+        </div>
+      `;
+      progressSection.appendChild(container);
+    });
+  }
+
+  // Sonraki raunt hazır durumlarını temizle
+  playerNextRoundReady = {};
 
   resetRaceState();
 
-  // Seri skor tabelasını ayarla
+  // Skor tabelası
   if (matchMode !== 'single') {
     seriesScoreBox.classList.remove('hidden');
     scoreModeLabel.innerText = matchMode === 'bo3' ? 'BEST OF 3' : 'BEST OF 5';
-    myScoreDisplay.innerText = myWins;
-    opponentScoreDisplay.innerText = opponentWins;
+    // Seride kimin kaç galibiyeti olduğunu yaz
+    myScoreDisplay.innerText = playerWins[peer.id] || 0;
+    
+    // Rakiplerden en yüksek skora sahip olanı rakip skoru olarak göster
+    let maxOpponentScore = 0;
+    Object.keys(playerWins).forEach(id => {
+      if (id !== peer.id && playerWins[id] > maxOpponentScore) {
+        maxOpponentScore = playerWins[id];
+      }
+    });
+    opponentScoreDisplay.innerText = maxOpponentScore;
   } else {
     seriesScoreBox.classList.add('hidden');
   }
 
-  // Set my name and avatar on badge
-  document.getElementById('my-avatar-display').innerText = myProfile.avatar;
-  document.getElementById('my-avatar-display').style.background = myProfile.bg;
-  document.getElementById('my-name-display').innerText = myProfile.name;
-
-  // Set opponent's name and avatar on badge
-  updateOpponentUIProfile();
-
   if (isHost) {
-    // resetRaceState() zaten currentText'i rastgele seçti; host bunu rakiple paylaşır.
-    sendPeerData({ type: 'INIT_GAME', code: currentText });
     setTimeout(startCountdown, 500);
   }
 }
@@ -574,11 +703,158 @@ function startCountdown() {
       countdownOverlay.classList.add('hidden');
       codeInput.disabled = false;
       codeInput.focus();
+      // countdown bittiğinde -1 göndererek kapat
+      if (isHost) sendPeerData({ type: 'COUNTDOWN', count: -1 });
     }
   }, 1000);
 }
 
-// Veri paketleri alımı ve yardımcı gönderme/kontrol fonksiyonları multiplayer.js içerisindedir.
+// Bitirme analizi ve sonuçlar (Multiplayer için özelleştirilmiş)
+function resolveMultiplayerOutcome() {
+  // Ben bitirdim mi?
+  const myFinish = playerFinishData[peer.id];
+  if (!myFinish) {
+    // Henüz bitirmedim ama rakip bitirmiş olabilir
+    showOpponentFinishedBanner();
+    return;
+  }
+
+  const finishedIds = Object.keys(playerFinishData);
+  const totalPlayers = Object.keys(roomPlayers).length;
+
+  if (finishedIds.length < totalPlayers) {
+    // Herkesin bitirmesi bekleniyor, ama benim sonucumu göster
+    showWaitingForOpponents(myFinish.stats);
+  } else {
+    // Herkes bitirdi, genel sonuçları listele
+    showMultiplayerResults();
+  }
+}
+
+function showWaitingForOpponents(myStats) {
+  raceCard.classList.add('hidden');
+  resultCard.classList.remove('hidden');
+  document.querySelector('.result-actions').classList.add('hidden');
+
+  btnNextRound.classList.add('hidden');
+  btnRematch.classList.add('hidden');
+  rematchRequestBox.classList.add('hidden');
+
+  const resultTitle = document.getElementById('result-title');
+  resultTitle.innerHTML = "Bitirdin! Diğer oyuncular yazıyor... ⏳";
+  resultTitle.style.color = "#38bdf8";
+
+  document.getElementById('res-wpm').innerText = myStats.duration || myStats.wpm;
+  document.getElementById('res-cpm').innerText = myStats.cpm;
+  document.getElementById('res-errors').innerText = myStats.errors;
+}
+
+function showMultiplayerResults() {
+  raceCard.classList.add('hidden');
+  resultCard.classList.remove('hidden');
+  document.querySelector('.result-actions').classList.remove('hidden');
+
+  btnNextRound.classList.add('hidden');
+  btnRematch.classList.add('hidden');
+  rematchRequestBox.classList.add('hidden');
+
+  const resultTitle = document.getElementById('result-title');
+  resultTitle.innerHTML = `Yarış Sonuçları 🏁`;
+  resultTitle.style.color = "#fbbf24";
+
+  // Oyuncuları bitirme süresine göre sırala
+  const sortedPlayers = Object.keys(playerFinishData)
+    .map(id => ({
+      id,
+      profile: roomPlayers[id],
+      stats: playerFinishData[id].stats,
+      elapsedMs: playerFinishData[id].elapsedMs
+    }))
+    .sort((a, b) => a.elapsedMs - b.elapsedMs);
+
+  // Sonuç alanını dinamik doldur
+  const showcase = document.querySelector('.result-profiles-showcase');
+  if (showcase) {
+    showcase.innerHTML = '';
+    showcase.style.flexDirection = 'column';
+    showcase.style.gap = '0.75rem';
+    showcase.style.alignItems = 'stretch';
+
+    sortedPlayers.forEach((p, index) => {
+      const isMe = p.id === peer.id;
+      const item = document.createElement('div');
+      item.style.display = 'flex';
+      item.style.alignItems = 'center';
+      item.style.justifyContent = 'space-between';
+      item.style.background = isMe ? 'rgba(56, 189, 248, 0.15)' : 'rgba(255, 255, 255, 0.03)';
+      item.style.border = isMe ? '1px solid #38bdf8' : '1px solid #1e293b';
+      item.style.padding = '0.75rem 1rem';
+      item.style.borderRadius = '12px';
+      
+      let trophy = `${index + 1}.`;
+      if (index === 0) trophy = '👑';
+      else if (index === 1) trophy = '🥈';
+      else if (index === 2) trophy = '🥉';
+
+      item.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <span style="font-size: 1.2rem; font-weight: 800; width: 24px; text-align: center;">${trophy}</span>
+          <div style="background: ${p.profile.bg}; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">${p.profile.avatar}</div>
+          <div style="text-align: left;">
+            <div style="font-weight: 700; color: #fff;">${p.profile.name} ${isMe ? '(Sen)' : ''}</div>
+            <div style="font-size: 0.75rem; color: #94a3b8;">CPM: ${p.stats.cpm} | Hata: ${p.stats.errors}</div>
+          </div>
+        </div>
+        <div style="font-weight: 800; font-size: 1.2rem; color: #38bdf8;">${p.stats.duration} sn</div>
+      `;
+      showcase.appendChild(item);
+    });
+  }
+
+  // Kendi detay kartlarımız
+  const myFinish = playerFinishData[peer.id];
+  if (myFinish) {
+    document.getElementById('res-wpm').innerText = myFinish.stats.duration || myFinish.stats.wpm;
+    document.getElementById('res-cpm').innerText = myFinish.stats.cpm;
+    document.getElementById('res-errors').innerText = myFinish.stats.errors;
+  }
+
+  // Seri / Rövanş buton yönetimi
+  if (isHost) {
+    if (matchMode !== 'single') {
+      // Raundun kazananını bulalım ve skorunu ekleyelim
+      const roundWinnerId = sortedPlayers[0].id;
+      playerWins[roundWinnerId] = (playerWins[roundWinnerId] || 0) + 1;
+
+      // Seri galibi var mı?
+      const targetWins = matchMode === 'bo3' ? 2 : 3;
+      let seriesWinnerId = null;
+      Object.keys(playerWins).forEach(id => {
+        if (playerWins[id] >= targetWins) {
+          seriesWinnerId = id;
+        }
+      });
+
+      if (seriesWinnerId) {
+        const winnerProfile = roomPlayers[seriesWinnerId];
+        resultTitle.innerHTML = `🏆 Seri Şampiyonu: ${winnerProfile.name}! 👑`;
+        resultTitle.style.color = "#fbbf24";
+        btnRematch.classList.remove('hidden');
+        btnRematch.disabled = false;
+      } else {
+        btnNextRound.classList.remove('hidden');
+        btnNextRound.disabled = false;
+      }
+    } else {
+      btnRematch.classList.remove('hidden');
+      btnRematch.disabled = false;
+    }
+  } else {
+    // Katılımcı için butonlar pasif durumdadır (Oda sahibinin aksiyonu beklenir)
+    btnNextRound.classList.add('hidden');
+    btnRematch.classList.add('hidden');
+  }
+}
 
 // BUTON DİNLEYİCİLERİ
 btnSolo.addEventListener('click', startSoloGame);
@@ -661,24 +937,33 @@ function initProfileEvents() {
       myProfile.bg = option.getAttribute('data-bg');
       
       const preview = document.getElementById('current-avatar-preview');
-      preview.innerText = myProfile.avatar;
-      preview.style.background = myProfile.bg;
+      if (preview) {
+        preview.innerText = myProfile.avatar;
+        preview.style.background = myProfile.bg;
+      }
       
       saveProfile();
     });
   });
 
-  document.getElementById('player-name').addEventListener('input', () => {
-    saveProfile();
-  });
+  const nameInput = document.getElementById('player-name');
+  if (nameInput) {
+    nameInput.addEventListener('input', () => {
+      saveProfile();
+    });
+  }
 
   // Rövanş ve sonraki raunt buton dinleyicileri
   btnNextRound.addEventListener('click', () => {
     btnNextRound.innerText = "Hazır! ⏳";
     btnNextRound.disabled = true;
-    myNextRoundReady = true;
-    sendPeerData({ type: 'ROUND_READY' });
-    checkNextRoundTransition();
+    
+    if (isHost) {
+      playerNextRoundReady[peer.id] = true;
+      checkNextRoundTransition();
+    } else {
+      sendPeerData({ type: 'ROUND_READY', peerId: peer.id });
+    }
   });
 
   btnRematch.addEventListener('click', () => {
@@ -701,17 +986,26 @@ function initProfileEvents() {
 }
 
 function checkNextRoundTransition() {
-  if (myNextRoundReady && opponentNextRoundReady) {
+  const readyIds = Object.keys(playerNextRoundReady);
+  const totalPlayers = Object.keys(roomPlayers).length;
+  
+  if (readyIds.length === totalPlayers) {
+    // Yeni kelimeyi seçip herkese tura başla mesajı yollayalım
+    currentText = getRandomCodeByLanguage();
+    sendPeerData({ type: 'ROUND_TRANSITION', code: currentText });
     prepareMultiplayerRace();
   }
 }
 
 function startNewSeries() {
-  myWins = 0;
-  opponentWins = 0;
-  myNextRoundReady = false;
-  opponentNextRoundReady = false;
-  prepareMultiplayerRace();
+  playerWins = {};
+  playerNextRoundReady = {};
+  
+  if (isHost) {
+    currentText = getRandomCodeByLanguage();
+    sendPeerData({ type: 'ROUND_TRANSITION', code: currentText });
+    prepareMultiplayerRace();
+  }
 }
 
 // Bir arkadaşın davet linkine tıklanarak gelindiyse (?room=ID), oda ID'sini
