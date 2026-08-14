@@ -138,6 +138,9 @@ function startSoloGame() {
   resultCard.classList.add('hidden');
   raceCard.classList.remove('hidden');
 
+  const reactionsCont = document.getElementById('reactions-container');
+  if (reactionsCont) reactionsCont.classList.add('hidden');
+
   prepareSoloRaceUI();
   resetRaceState();
   codeInput.disabled = false;
@@ -622,6 +625,9 @@ function prepareMultiplayerRace() {
   lobbyCard.classList.add('hidden');
   raceCard.classList.remove('hidden');
 
+  const reactionsCont = document.getElementById('reactions-container');
+  if (reactionsCont) reactionsCont.classList.remove('hidden');
+
   // Skor / Hazır durumları
   playerProgress = {};
   playerFinishData = {};
@@ -982,6 +988,21 @@ function initProfileEvents() {
     rematchRequestBox.classList.add('hidden');
     sendPeerData({ type: 'REMATCH_ANSWER', answer: 'decline' });
     leaveToLobby();
+  });
+
+  // Reaksiyon butonları dinleyicisi
+  document.querySelectorAll('.reaction-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!isMultiplayer || !peer) return;
+      const reactionText = btn.getAttribute('data-reaction');
+      
+      // Kendi ekranımızda göster
+      showReactionBubble(peer.id, reactionText);
+      showGlobalToast(peer.id, reactionText);
+      
+      // Diğer oyunculara gönder
+      sendPeerData({ type: 'REACTION', text: reactionText, peerId: peer.id });
+    });
   });
 }
 

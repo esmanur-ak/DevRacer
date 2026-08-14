@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Code Speed Racer 🚀</title>
+  <title>DevRacer</title>
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23090d16' stroke='%23131c2e' stroke-width='4'/%3E%3Cpath d='M 42,22 C 34,22 32,32 32,37 C 32,43 27,47 24,50 C 27,53 32,57 32,63 C 32,68 34,78 42,78' fill='none' stroke='%2338bdf8' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M 58,22 C 66,22 68,32 68,37 C 68,43 73,47 76,50 C 73,53 68,57 68,63 C 68,68 66,78 58,78' fill='none' stroke='%2338bdf8' stroke-width='7' stroke-linecap='round'/%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2322c55e'/%3E%3Cstop offset='100%25' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='46' y='37' width='8' height='26' rx='4' fill='url(%23grad)'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="theme.css">
@@ -17,7 +17,7 @@
 <body>
   <div class="container">
     <header>
-      <h1>⚡ DEV RACER</h1>
+      <h1>⚡ DEVRACER</h1>
       <p id="personal-record">🏆 En İyi Süren: <strong id="record-wpm">--</strong> sn</p>
       <div id="run-history" class="run-history"></div>
     </header>
@@ -220,6 +220,19 @@
       <div id="code-display" class="code-box"></div>
       <textarea id="code-input" placeholder="Yazmaya başlamak için buraya tıklayın..." disabled></textarea>
 
+      <!-- HIZLI REAKSİYON TEPKİ BUTONLARI -->
+      <div id="reactions-container" class="reactions-container hidden" style="margin-top: 1rem; background: rgba(9, 13, 22, 0.4); padding: 0.75rem; border-radius: 12px; border: 1px solid #1e293b; text-align: left;">
+        <span style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 0.5rem; letter-spacing: 0.5px;">⚡ RAKİPLERE TEPKİ GÖNDER:</span>
+        <div class="reactions-grid" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="reaction-btn btn" data-reaction="🔥 Alev" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;">🔥 Alev</button>
+          <button class="reaction-btn btn" data-reaction="🐢 Yavaşsın" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;">🐢 Yavaşsın</button>
+          <button class="reaction-btn btn" data-reaction="😎 Kolaydı" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;">😎 Kolaydı</button>
+          <button class="reaction-btn btn" data-reaction="😱 Şok" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;">😱 Şok</button>
+          <button class="reaction-btn btn" data-reaction="😡 Hile!" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none; background: linear-gradient(135deg, #ef4444, #b91c1c);">😡 Hile!</button>
+          <button class="reaction-btn btn" data-reaction="😭 Pes" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none; background: linear-gradient(135deg, #eab308, #ca8a04); color: #000;">😭 Pes</button>
+        </div>
+      </div>
+
       <button id="btn-leave-race" class="btn-link">✕ Ana Menüye Dön</button>
     </div>
 
@@ -321,16 +334,16 @@
 
       <!-- DESCRIPTION -->
       <p class="footer-description">
-        DevRacer kullanıcılarına birçok farklı konuda eğitim ve uygulama hazırlayan sitedir.<br>
+        DevRacer, kullanıcıların farklı programlama dillerinde hızlarını ve kodlama becerilerini test edebileceği eğlenceli bir kod yarışması platformudur.<br>
         Hazırlanan içerikler devamlı kontrol edilmektedir, fakat DevRacer bilgilerinin tamamen doğru olduğunu kabul
         etmez.<br>
-        Sitede bulunan hiçbir içerik kaynak belirtilse dahi kopyalanamaz ve yayınlanamaz.
+        
       </p>
     </div>
 
     <!-- BOTTOM BAR -->
     <div class="footer-bottom">
-      Tüm hakları saklıdır. 2012 - 2026 DevRacer
+      Tüm hakları saklıdır. 2026 - DevRacer
     </div>
   </footer>
 

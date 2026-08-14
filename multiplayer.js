@@ -267,7 +267,82 @@ function handleIncomingData(data, senderConn) {
         leaveToLobby();
       }
       break;
+
+    case 'REACTION':
+      showReactionBubble(data.peerId, data.text);
+      showGlobalToast(data.peerId, data.text);
+      if (isHost) {
+        // Host ise diğer oyunculara da dağıt (broadcast)
+        sendPeerData({ type: 'REACTION', text: data.text, peerId: data.peerId });
+      }
+      break;
   }
+}
+
+function showReactionBubble(senderPeerId, text) {
+  const container = document.getElementById(`progress-container-${senderPeerId}`);
+  if (!container) return;
+
+  const existing = container.querySelector('.reaction-bubble');
+  if (existing) existing.remove();
+
+  const bubble = document.createElement('div');
+  bubble.className = 'reaction-bubble';
+  bubble.innerText = text;
+  
+  container.appendChild(bubble);
+  
+  setTimeout(() => {
+    bubble.remove();
+  }, 2000);
+}
+
+function showGlobalToast(senderPeerId, text) {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.style.position = 'fixed';
+    container.style.top = '24px';
+    container.style.right = '24px';
+    container.style.zIndex = '99999';
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '0.75rem';
+    container.style.pointerEvents = 'none';
+    container.style.maxWidth = '320px';
+    document.body.appendChild(container);
+  }
+
+  const player = roomPlayers[senderPeerId] || myProfile;
+  const toast = document.createElement('div');
+  toast.className = 'reaction-toast';
+  
+  // Custom toast styling
+  toast.style.background = 'rgba(9, 13, 22, 0.95)';
+  toast.style.borderRadius = '16px';
+  toast.style.padding = '0.8rem 1.2rem';
+  toast.style.color = '#fff';
+  toast.style.display = 'flex';
+  toast.style.alignItems = 'center';
+  toast.style.gap = '0.75rem';
+  toast.style.border = `2px solid #8b5cf6`;
+  toast.style.backdropFilter = 'blur(10px)';
+  toast.style.pointerEvents = 'auto';
+
+  toast.innerHTML = `
+    <div style="background: ${player.bg}; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">${player.avatar}</div>
+    <div style="text-align: left;">
+      <span style="color: #64748b; font-size: 0.7rem; display: block; font-weight: 800; letter-spacing: 0.5px;">${player.name.toUpperCase()} DİYOR Kİ:</span>
+      <span style="font-size: 1rem; font-weight: 800; color: #fbbf24;">${text}</span>
+    </div>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
 }
 
 // Host'un tüm client'lara veri göndermesi veya client'ın host'a göndermesi
