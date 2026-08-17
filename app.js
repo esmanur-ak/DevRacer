@@ -1180,9 +1180,7 @@ if (document.getElementById('btn-leave-room')) {
 }
 if (document.getElementById('btn-leave-race')) {
   document.getElementById('btn-leave-race').addEventListener('click', () => {
-    if (isMultiplayer && confirm(translateText('confirmLeave'))) {
-      leaveToLobby();
-    } else if (!isMultiplayer) {
+    if (confirm(translateText('confirmLeave'))) {
       leaveToLobby();
     }
   });
