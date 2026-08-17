@@ -300,6 +300,19 @@ let startTime = null;
 let timerInterval = null;
 let isGameActive = false;
 
+// MULTIPLAYER DURUM DEĞİŞKENLERİ
+let peer = null;
+let conn = null;
+let connections = [];
+let isHost = false;
+let isMultiplayer = false;
+let roomPlayers = {};
+let playerProgress = {};
+let playerFinishData = {};
+let matchMode = 'single';
+let playerWins = {};
+let playerNextRoundReady = {};
+
 // PROFILLER
 let myProfile = {
   name: "Yarışçı",

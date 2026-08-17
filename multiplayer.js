@@ -1,19 +1,5 @@
 // OYUN VE PEERJS DURUM DEĞİŞKENLERİ
-let peer = null;
-let conn = null; // Client için host bağlantısı
-let connections = []; // Host için bağlanan tüm client'lar
-let isHost = false;
-let isMultiplayer = false;
-
-// Multiplayer oyuncu listesi ve yarış verileri
-let roomPlayers = {}; // peerId -> { name, avatar, bg }
-let playerProgress = {}; // peerId -> percent (0-100)
-let playerFinishData = {}; // peerId -> { stats, elapsedMs }
-
-// SERİ VE RÖVANŞ DURUMLARI (Multiplayer serisi host tarafından yönetilir)
-let matchMode = 'single'; // 'single', 'bo3', 'bo5'
-let playerWins = {}; // peerId -> win count
-let playerNextRoundReady = {}; // peerId -> boolean
+// (Değişkenler app.js dosyasında global olarak tanımlanmıştır)
 
 // 4 Haneli Oda Kodu Üretici (2-5 karakter arası)
 function generateRoomId() {
