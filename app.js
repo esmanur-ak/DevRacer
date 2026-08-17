@@ -1,5 +1,254 @@
 // DİLLERE GÖRE AYRILMIŞ KOD KÜTÜPHANESİ - database.js dosyasından yüklenir
 
+const TRANSLATIONS = {
+  tr: {
+    personalRecord: "En İyi Süren:",
+    personalRecordSec: "sn",
+    playerProfile: "👤 OYUNCU PROFİLİ:",
+    playerNamePlaceholder: "Oyuncu adınızı girin...",
+    selectAvatar: "Avatar Seçin:",
+    dailyBests: "GÜNÜN ENLERİ",
+    roomCode: "K  O  D",
+    codeSubtext: "Kodunuz mu yok?<br>Sorun değil. İstediğiniz bir modda bir oyun başlatabilirsiniz.",
+    selectLanguage: "💻 Yarışılacak Yazılım Dili:",
+    selectLanguageAll: "🔀 Karışık (Tüm Diller)",
+    matchSeries: "🏆 Maç Serisi:",
+    singleMatch: "⚡ Tek Maç",
+    bo3: "🥇 Best of 3 (2 Galibiyet)",
+    bo5: "🏆 Best of 5 (3 Galibiyet)",
+    soloModeTitle: "OYUN MODU",
+    soloModeDesc: "Kendi rekorunu kır",
+    friendModeTitle: "ARKADAŞ MODU",
+    friendModeDesc: "Yeni oda aç ve yarış",
+    roomCreated: "Oda Oluşturuldu! 🎮",
+    roomJoined: "Odaya Katılındı! 🎮",
+    roomInviteDesc: "Arkadaşlarılana bu ID'yi göndererek oyuna davet et (En fazla 5 kişi):",
+    copyInviteLink: "📋 Davet Linkini Kopyala",
+    joinedPlayers: "👤 KATILAN OYUNCULAR:",
+    waitingPlayers: "⏳ Diğer oyuncuların katılması bekleniyor...",
+    cancelMenu: "İptal Et / Ana Menüye Dön",
+    startGame: "🚀 Oyunu Başlat",
+    waitingHost: "⏳ Oda sahibinin oyunu başlatması bekleniyor...",
+    opponentFinished: "⚡ Rakip bitirdi! Hızlan!",
+    time: "SÜRE",
+    seconds: "Saniye",
+    cpm: "CPM",
+    cpmDesc: "Karakter / Dk",
+    error: "HATA",
+    errorDesc: "Yanlış Tuş",
+    sendReaction: "⚡ RAKİPLERE TEPKİ GÖNDER:",
+    leaveRace: "✕ Ana Menüye Dön",
+    resultTitleSolo: "Tebrikler! 🎉",
+    timeSec: "Süre (Saniye)",
+    cpmLabel: "CPM (Karakter/Dk)",
+    errorCount: "Hata Sayısı",
+    tryAgain: "🔄 TEKRAR DENE",
+    challengeFriend: "🔥 SKORUNU ARKADAŞINLA YARIŞTIR",
+    privacyPolicy: "Gizlilik Politikası",
+    termsOfService: "Kullanıcı Sözleşmesi",
+    cookies: "Çerezler",
+    contact: "İletişim",
+    footerDesc: "DevRacer, kullanıcıların farklı programlama dillerinde hızlarını ve kodlama becerilerini test edebileceği eğlenceli bir kod yarışması platformudur.<br>Hazırlanan içerikler devamlı kontrol edilmektedir, fakat DevRacer bilgilerinin tamamen doğru olduğunu kabul etmez.",
+    allRightsReserved: "Tüm hakları saklıdır. 2026 - DevRacer",
+    cookieText: "🍪 Deneyiminizi geliştirmek ve yarış ayarlarınızı (isim, rekor) tarayıcınızda saklamak için yerel çerezleri kullanıyoruz.",
+    moreInfo: "Detaylı Bilgi",
+    accept: "Kabul Et ✅",
+    decline: "Reddet ✕",
+    nextRound: "🎮 SONRAKİ RAUNDA GEÇ",
+    rematch: "🔥 RÖVANŞ TEKLİF ET",
+    rematchRequestText: "Rakip seninle rövanş yapmak istiyor! ⚔️",
+    reactionFire: "🔥 Alev",
+    reactionSlow: "🐢 Yavaşsın",
+    reactionEasy: "😎 Kolaydı",
+    reactionShock: "😱 Şok",
+    reactionCheat: "😡 Hile!",
+    reactionForfeit: "😭 Pes",
+    
+    // JS dynamic strings
+    roomFull: "Oda dolu!",
+    roomFullMsg: "Üzgünüz, oda dolu ya da oyun çoktan başladı.",
+    idInUse: "Bu Oda ID zaten kullanımda! Başka bir ID deneyin.",
+    connError: "Bağlantı hatası oluştu! Tekrar deneyin.",
+    roomConnecting: "Odaya bağlanılıyor...",
+    enterRoomId: "Lütfen geçerli bir Oda ID girin!",
+    waitingPlayersBtn: "⏳ Oyuncular Bekleniyor...",
+    waitingHostText: "⏳ Oda sahibinin oyunu başlatması bekleniyor...",
+    startReady: "BAŞLA! 🚀",
+    finishedWaiting: "Bitirdin! Diğer oyuncular yazıyor... ⏳",
+    finishedWaitingSingle: "Bitirdin! Rakip yazıyor... ⏳",
+    raceResults: "Yarış Sonuçları 🏁",
+    you: "(Sen)",
+    sen: "(SEN)",
+    owner: "👑 Oda Sahibi",
+    player: "🎮 Oyuncu",
+    linkCopied: "Link Kopyalandı! ✅",
+    confirmLeave: "Yarıştan ayrılmak istediğine emin misin?",
+    rematchRequested: "Rövanş İstendi... ⏳",
+    readyWaiting: "Hazır! ⏳",
+    opponentRematchOffer: "Rakip seninle rövanş yapmak istiyor! ⚔️",
+    rematchRejected: "Rakip rövanş teklifini reddetti.",
+    rematchAccepted: "Rakip rövanş teklifini kabul etti! Seri sıfırlanıyor...",
+    rematchPending: "⏳ Rakibin rövanş cevabı bekleniyor...",
+    nextRoundPending: "⏳ Rakibin sonraki roundu başlatması bekleniyor...",
+    soloRecordBeaten: "Tebrikler! Kendi rekorunu kırdın! 🎉",
+    youWon: "Tebrikler, Kazandın! 🏆⚡",
+    opponentWon: "{name} Kazandı! 🥈",
+    seriesChampionMe: "🏆 Seri Şampiyonu: {name}! 👑",
+    seriesChampionOpponent: "🥈 Seri Şampiyonu: {name}!",
+    roundWon: "Raundu Kazandın! ⚡",
+    roundLost: "Raundu Rakip Kazandı! 🥈",
+    codeInputPlaceholder: "Yazmaya başlamak için buraya tıklayın..."
+  },
+  en: {
+    personalRecord: "Personal Best:",
+    personalRecordSec: "s",
+    playerProfile: "👤 PLAYER PROFILE:",
+    playerNamePlaceholder: "Enter player name...",
+    selectAvatar: "Select Avatar:",
+    dailyBests: "DAILY BESTS",
+    roomCode: "C O D E",
+    codeSubtext: "Don't have a code?<br>No problem. You can start a game in any mode.",
+    selectLanguage: "💻 Programming Language:",
+    selectLanguageAll: "🔀 Mixed (All Languages)",
+    matchSeries: "🏆 Match Series:",
+    singleMatch: "⚡ Single Match",
+    bo3: "🥇 Best of 3 (2 Wins)",
+    bo5: "🏆 Best of 5 (3 Wins)",
+    soloModeTitle: "PLAY MODE",
+    soloModeDesc: "Break your own record",
+    friendModeTitle: "FRIEND MODE",
+    friendModeDesc: "Create room and race",
+    roomCreated: "Room Created! 🎮",
+    roomJoined: "Room Joined! 🎮",
+    roomInviteDesc: "Send this ID to your friends to invite them (Max 5 players):",
+    copyInviteLink: "📋 Copy Invite Link",
+    joinedPlayers: "👤 JOINED PLAYERS:",
+    waitingPlayers: "⏳ Waiting for other players to join...",
+    cancelMenu: "Cancel / Return to Main Menu",
+    startGame: "🚀 Start Game",
+    waitingHost: "⏳ Waiting for host to start the game...",
+    opponentFinished: "⚡ Opponent finished! Speed up!",
+    time: "TIME",
+    seconds: "Seconds",
+    cpm: "CPM",
+    cpmDesc: "Chars / Min",
+    error: "ERROR",
+    errorDesc: "Wrong Key",
+    sendReaction: "⚡ SEND REACTION TO OPPONENTS:",
+    leaveRace: "✕ Return to Main Menu",
+    resultTitleSolo: "Congratulations! 🎉",
+    timeSec: "Time (Seconds)",
+    cpmLabel: "CPM (Chars/Min)",
+    errorCount: "Errors",
+    tryAgain: "🔄 TRY AGAIN",
+    challengeFriend: "🔥 CHALLENGE A FRIEND",
+    privacyPolicy: "Privacy Policy",
+    termsOfService: "Terms of Service",
+    cookies: "Cookies",
+    contact: "Contact",
+    footerDesc: "DevRacer is a fun code race platform where users can test their speed and coding skills in different programming languages.<br>The content is checked regularly, but DevRacer does not warrant that information is completely accurate.",
+    allRightsReserved: "All rights reserved. 2026 - DevRacer",
+    cookieText: "🍪 We use local cookies to improve your experience and store your race settings (name, record) on your browser.",
+    moreInfo: "More Info",
+    accept: "Accept ✅",
+    decline: "Decline ✕",
+    nextRound: "🎮 GO TO NEXT ROUND",
+    rematch: "🔥 OFFER REMATCH",
+    rematchRequestText: "Opponent wants a rematch! ⚔️",
+    reactionFire: "🔥 Fire",
+    reactionSlow: "🐢 Slowpoke",
+    reactionEasy: "😎 Easy",
+    reactionShock: "😱 Shock",
+    reactionCheat: "😡 Cheat!",
+    reactionForfeit: "😭 Forfeit",
+
+    // JS dynamic strings
+    roomFull: "Room is full!",
+    roomFullMsg: "Sorry, this room is full or the game has already started.",
+    idInUse: "This Room ID is already in use! Try another ID.",
+    connError: "Connection error occurred! Please try again.",
+    roomConnecting: "Connecting to room...",
+    enterRoomId: "Please enter a valid Room ID!",
+    waitingPlayersBtn: "⏳ Waiting for Players...",
+    waitingHostText: "⏳ Waiting for host to start the game...",
+    startReady: "START! 🚀",
+    finishedWaiting: "Finished! Other players are typing... ⏳",
+    finishedWaitingSingle: "Finished! Opponent is typing... ⏳",
+    raceResults: "Race Results 🏁",
+    you: "(You)",
+    sen: "(YOU)",
+    owner: "👑 Room Host",
+    player: "🎮 Player",
+    linkCopied: "Link Copied! ✅",
+    confirmLeave: "Are you sure you want to leave the race?",
+    rematchRequested: "Rematch Requested... ⏳",
+    readyWaiting: "Ready! ⏳",
+    opponentRematchOffer: "Opponent wants a rematch! ⚔️",
+    rematchRejected: "Opponent declined the rematch offer.",
+    rematchAccepted: "Opponent accepted the rematch offer! Resetting series...",
+    rematchPending: "⏳ Waiting for opponent's rematch response...",
+    nextRoundPending: "⏳ Waiting for opponent to start the next round...",
+    soloRecordBeaten: "Congratulations! You beat your own record! 🎉",
+    youWon: "Congratulations, You Won! 🏆⚡",
+    opponentWon: "{name} Won! 🥈",
+    seriesChampionMe: "🏆 Series Champion: {name}! 👑",
+    seriesChampionOpponent: "🥈 Series Champion: {name}!",
+    roundWon: "You Won the Round! ⚡",
+    roundLost: "Opponent Won the Round! 🥈",
+    codeInputPlaceholder: "Click here to start typing..."
+  }
+};
+
+let currentLang = localStorage.getItem('devracer_lang') || 'tr';
+
+function translateText(key, replacements = {}) {
+  let text = TRANSLATIONS[currentLang][key] || TRANSLATIONS['tr'][key] || key;
+  for (let k in replacements) {
+    text = text.replace(`{${k}}`, replacements[k]);
+  }
+  return text;
+}
+
+function applyLanguage() {
+  // Translate elements with data-translate attribute
+  document.querySelectorAll('[data-translate]').forEach(el => {
+    const key = el.getAttribute('data-translate');
+    const translation = translateText(key);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.value = translation;
+    } else {
+      el.innerHTML = translation;
+    }
+  });
+
+  // Translate placeholders
+  document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-translate-placeholder');
+    el.placeholder = translateText(key);
+  });
+
+  // Update active class on buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    if (btn.getAttribute('data-lang') === currentLang) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+// Bind lang buttons
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentLang = btn.getAttribute('data-lang');
+      localStorage.setItem('devracer_lang', currentLang);
+      applyLanguage();
+    });
+  });
+  applyLanguage();
+});
+
 // DOM ELEMANLARI
 const lobbyCard = document.getElementById('lobby-card');
 const roomInfoCard = document.getElementById('room-info-card');
@@ -528,7 +777,7 @@ btnJoinRoom.addEventListener('click', () => {
   }
 
   if (!targetRoomId) {
-    alert('Lütfen geçerli bir Oda ID girin!');
+    alert(translateText('enterRoomId'));
     return;
   }
 
@@ -539,7 +788,7 @@ btnJoinRoom.addEventListener('click', () => {
   initPeer();
 
   peer.on('open', () => {
-    roomStatus.innerText = 'Odaya bağlanılıyor...';
+    roomStatus.innerText = translateText('roomConnecting');
     conn = peer.connect('devracer-' + targetRoomId);
     setupConnectionListeners(conn);
   });
@@ -589,8 +838,8 @@ function updateLobbyPlayersUI() {
 
     playerRow.innerHTML = `
       <div style="background: ${p.bg}; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">${p.avatar}</div>
-      <div style="font-weight: 700; flex: 1; color: #fff;">${p.name} ${isMe ? '<span style="color: #64748b; font-size: 0.8rem; font-weight: 500;">(SEN)</span>' : ''}</div>
-      <div style="font-size: 0.8rem; font-weight: 800; color: #fbbf24;">${isRoomHost ? '👑 Oda Sahibi' : '🎮 Oyuncu'}</div>
+      <div style="font-weight: 700; flex: 1; color: #fff;">${p.name} ${isMe ? `<span style="color: #64748b; font-size: 0.8rem; font-weight: 500;">${translateText('sen')}</span>` : ''}</div>
+      <div style="font-size: 0.8rem; font-weight: 800; color: #fbbf24;">${isRoomHost ? translateText('owner') : translateText('player')}</div>
     `;
     playerListEl.appendChild(playerRow);
   });
@@ -604,10 +853,10 @@ function updateLobbyPlayersUI() {
       startBtn.classList.remove('hidden');
       startBtn.disabled = totalCount < 2;
       if (totalCount < 2) {
-        startBtn.innerText = '⏳ Oyuncular Bekleniyor...';
+        startBtn.innerText = translateText('waitingPlayersBtn');
         startBtn.style.opacity = '0.6';
       } else {
-        startBtn.innerText = '🚀 Oyunu Başlat';
+        startBtn.innerText = translateText('startGame');
         startBtn.style.opacity = '1';
       }
     }
@@ -615,7 +864,7 @@ function updateLobbyPlayersUI() {
     if (startBtn) startBtn.classList.add('hidden');
     if (waitingText) {
       waitingText.classList.remove('hidden');
-      waitingText.innerText = '⏳ Oda sahibinin oyunu başlatması bekleniyor...';
+      waitingText.innerText = translateText('waitingHostText');
     }
   }
 }
@@ -648,7 +897,7 @@ function prepareMultiplayerRace() {
       container.innerHTML = `
         <div class="player-info-badge ${isMe ? 'my-badge' : 'opponent-badge'}">
           <span class="player-avatar-mini" style="background: ${p.bg};">${p.avatar}</span>
-          <span class="player-name-label">${p.name} ${isMe ? '(Sen)' : ''}</span>
+          <span class="player-name-label">${p.name} ${isMe ? translateText('you') : ''}</span>
         </div>
         <div class="progress-bar-bg">
           <div id="progress-bar-${id}" class="progress-bar ${isMe ? 'my-bar' : 'opponent-bar'}"></div>
@@ -702,7 +951,7 @@ function startCountdown() {
       countdownNumber.innerText = count;
       if (isHost) sendPeerData({ type: 'COUNTDOWN', count: count });
     } else if (count === 0) {
-      countdownNumber.innerText = "BAŞLA! 🚀";
+      countdownNumber.innerText = translateText('startReady');
       if (isHost) sendPeerData({ type: 'COUNTDOWN', count: 0 });
     } else {
       clearInterval(countdownInterval);
@@ -747,7 +996,7 @@ function showWaitingForOpponents(myStats) {
   rematchRequestBox.classList.add('hidden');
 
   const resultTitle = document.getElementById('result-title');
-  resultTitle.innerHTML = "Bitirdin! Diğer oyuncular yazıyor... ⏳";
+  resultTitle.innerHTML = translateText('finishedWaiting');
   resultTitle.style.color = "#38bdf8";
 
   document.getElementById('res-wpm').innerText = myStats.duration || myStats.wpm;
@@ -765,7 +1014,7 @@ function showMultiplayerResults() {
   rematchRequestBox.classList.add('hidden');
 
   const resultTitle = document.getElementById('result-title');
-  resultTitle.innerHTML = `Yarış Sonuçları 🏁`;
+  resultTitle.innerHTML = translateText('raceResults');
   resultTitle.style.color = "#fbbf24";
 
   // Oyuncuları bitirme süresine göre sırala
@@ -807,11 +1056,11 @@ function showMultiplayerResults() {
           <span style="font-size: 1.2rem; font-weight: 800; width: 24px; text-align: center;">${trophy}</span>
           <div style="background: ${p.profile.bg}; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">${p.profile.avatar}</div>
           <div style="text-align: left;">
-            <div style="font-weight: 700; color: #fff;">${p.profile.name} ${isMe ? '(Sen)' : ''}</div>
-            <div style="font-size: 0.75rem; color: #94a3b8;">CPM: ${p.stats.cpm} | Hata: ${p.stats.errors}</div>
+            <div style="font-weight: 700; color: #fff;">${p.profile.name} ${isMe ? translateText('you') : ''}</div>
+            <div style="font-size: 0.75rem; color: #94a3b8;">CPM: ${p.stats.cpm} | ${translateText('error')}: ${p.stats.errors}</div>
           </div>
         </div>
-        <div style="font-weight: 800; font-size: 1.2rem; color: #38bdf8;">${p.stats.duration} sn</div>
+        <div style="font-weight: 800; font-size: 1.2rem; color: #38bdf8;">${p.stats.duration} ${translateText('personalRecordSec')}</div>
       `;
       showcase.appendChild(item);
     });
@@ -843,7 +1092,7 @@ function showMultiplayerResults() {
 
       if (seriesWinnerId) {
         const winnerProfile = roomPlayers[seriesWinnerId];
-        resultTitle.innerHTML = `🏆 Seri Şampiyonu: ${winnerProfile.name}! 👑`;
+        resultTitle.innerHTML = translateText('seriesChampionMe', {name: winnerProfile.name});
         resultTitle.style.color = "#fbbf24";
         btnRematch.classList.remove('hidden');
         btnRematch.disabled = false;
@@ -902,8 +1151,8 @@ btnCopyId.addEventListener('click', () => {
     fallbackCopyText(shareUrl);
   }
 
-  btnCopyId.innerText = 'Link Kopyalandı! ✅';
-  setTimeout(() => (btnCopyId.innerText = '📋 Davet Linkini Kopyala'), 2000);
+  btnCopyId.innerText = translateText('linkCopied');
+  setTimeout(() => (btnCopyId.innerText = translateText('copyInviteLink')), 2000);
 });
 
 btnChallengeFriend.addEventListener('click', () => {
@@ -918,7 +1167,7 @@ if (document.getElementById('btn-leave-room')) {
 }
 if (document.getElementById('btn-leave-race')) {
   document.getElementById('btn-leave-race').addEventListener('click', () => {
-    if (isMultiplayer && confirm('Yarıştan ayrılmak istediğine emin misin?')) {
+    if (isMultiplayer && confirm(translateText('confirmLeave'))) {
       leaveToLobby();
     } else if (!isMultiplayer) {
       leaveToLobby();

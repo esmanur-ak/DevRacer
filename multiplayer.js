@@ -27,9 +27,9 @@ function initPeer(customId = null) {
     console.error('PeerJS Hata:', err);
     if (roomStatus) {
       if (err.type === 'unavailable-id') {
-        roomStatus.innerText = 'Bu Oda ID zaten kullanımda! Başka bir ID deneyin.';
+        roomStatus.innerText = translateText('idInUse');
       } else {
-        roomStatus.innerText = 'Bağlantı hatası oluştu! Tekrar deneyin.';
+        roomStatus.innerText = translateText('connError');
       }
     }
   });
@@ -53,7 +53,7 @@ function setupConnectionListeners(connection) {
         displayRoomIdEl.value = inputRoomIdEl.value.trim();
       }
       if (roomInfoTitleEl) {
-        roomInfoTitleEl.innerText = "Odaya Katılındı! 🎮";
+        roomInfoTitleEl.innerText = translateText('roomJoined');
       }
     }
 
@@ -105,7 +105,7 @@ function handleConnectionClose(closedConn) {
   } else {
     // Client isek ve host ile bağlantı koptuysa lobiye dön
     if (isMultiplayer) {
-      alert('Oda sahibi oyundan ayrıldı veya bağlantı koptu!');
+      alert(translateText('hostLeft'));
       leaveToLobby();
     }
   }
@@ -231,7 +231,7 @@ function handleIncomingData(data, senderConn) {
         handleConnectionClose(senderConn);
       } else {
         if (data.peerId === 'host') {
-          alert('Oda sahibi odadan ayrıldı.');
+          alert(translateText('hostLeft'));
           leaveToLobby();
         } else {
           delete roomPlayers[data.peerId];
@@ -256,14 +256,14 @@ function handleIncomingData(data, senderConn) {
 
     case 'REMATCH_REQUEST':
       rematchRequestBox.classList.remove('hidden');
-      rematchRequestText.innerText = `Yarışmacılar rövanş yapmak istiyor! ⚔️`;
+      rematchRequestText.innerText = translateText('rematchRequestText');
       break;
 
     case 'REMATCH_ANSWER':
       if (data.answer === 'accept') {
         startNewSeries();
       } else {
-        alert('Rövanş teklifi reddedildi.');
+        alert(translateText('rematchRejected'));
         leaveToLobby();
       }
       break;
@@ -333,7 +333,7 @@ function showGlobalToast(senderPeerId, text) {
   toast.innerHTML = `
     <div style="background: ${player.bg}; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">${player.avatar}</div>
     <div style="text-align: left;">
-      <span style="color: #64748b; font-size: 0.7rem; display: block; font-weight: 800; letter-spacing: 0.5px;">${player.name.toUpperCase()} DİYOR Kİ:</span>
+      <span style="color: #64748b; font-size: 0.7rem; display: block; font-weight: 800; letter-spacing: 0.5px;">${player.name.toUpperCase()} ${translateText('says')}</span>
       <span style="font-size: 1rem; font-weight: 800; color: #fbbf24;">${text}</span>
     </div>
   `;
