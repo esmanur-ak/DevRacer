@@ -438,7 +438,9 @@ function resetRaceState() {
   const note = document.getElementById('opponent-finished-note');
   if (note) note.classList.add('hidden');
 
-  currentText = getRandomCodeByLanguage();
+  if (!isMultiplayer) {
+    currentText = getRandomCodeByLanguage();
+  }
   
   codeInput.value = "";
   const myBar = document.getElementById('my-progress');
@@ -1128,7 +1130,7 @@ function showMultiplayerResults() {
 btnSolo.addEventListener('click', startSoloGame);
 
 btnRestartSolo.addEventListener('click', () => {
-  if (peer) leaveToLobby();
+  if (peer && typeof leaveToLobby === 'function') leaveToLobby();
   else {
     resultCard.classList.add('hidden');
     lobbyCard.classList.remove('hidden');
@@ -1169,19 +1171,25 @@ btnCopyId.addEventListener('click', () => {
 });
 
 btnChallengeFriend.addEventListener('click', () => {
-  if (peer) leaveToLobby();
+  if (peer && typeof leaveToLobby === 'function') leaveToLobby();
   resultCard.classList.add('hidden');
   lobbyCard.classList.remove('hidden');
   btnCreateRoom.click();
 });
 
 if (document.getElementById('btn-leave-room')) {
-  document.getElementById('btn-leave-room').addEventListener('click', leaveToLobby);
+  document.getElementById('btn-leave-room').addEventListener('click', () => {
+    if (typeof leaveToLobby === 'function') {
+      leaveToLobby();
+    }
+  });
 }
 if (document.getElementById('btn-leave-race')) {
   document.getElementById('btn-leave-race').addEventListener('click', () => {
     if (confirm(translateText('confirmLeave'))) {
-      leaveToLobby();
+      if (typeof leaveToLobby === 'function') {
+        leaveToLobby();
+      }
     }
   });
 }
@@ -1247,7 +1255,9 @@ function initProfileEvents() {
   btnDeclineRematch.addEventListener('click', () => {
     rematchRequestBox.classList.add('hidden');
     sendPeerData({ type: 'REMATCH_ANSWER', answer: 'decline' });
-    leaveToLobby();
+    if (typeof leaveToLobby === 'function') {
+      leaveToLobby();
+    }
   });
 
   // Reaksiyon butonları dinleyicisi
