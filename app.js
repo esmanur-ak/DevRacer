@@ -101,7 +101,9 @@ const TRANSLATIONS = {
     seriesChampionOpponent: "🥈 Seri Şampiyonu: {name}!",
     roundWon: "Raundu Kazandın! ⚡",
     roundLost: "Raundu Rakip Kazandı! 🥈",
-    codeInputPlaceholder: "Yazmaya başlamak için buraya tıklayın..."
+    codeInputPlaceholder: "Yazmaya başlamak için buraya tıklayın...",
+    hostLeft: "Oda kurucusu oyundan ayrıldı! Lobiye yönlendiriliyorsunuz.",
+    opponentLeft: "Rakip oyundan ayrıldı! Lobiye yönlendiriliyorsunuz."
   },
   en: {
     personalRecord: "Personal Best:",
@@ -203,7 +205,9 @@ const TRANSLATIONS = {
     seriesChampionOpponent: "🥈 Series Champion: {name}!",
     roundWon: "You Won the Round! ⚡",
     roundLost: "Opponent Won the Round! 🥈",
-    codeInputPlaceholder: "Click here to start typing..."
+    codeInputPlaceholder: "Click here to start typing...",
+    hostLeft: "The room host has left the game! Returning to lobby.",
+    opponentLeft: "The opponent has left the game! Returning to lobby."
   }
 };
 

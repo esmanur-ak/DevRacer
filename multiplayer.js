@@ -82,11 +82,21 @@ function handleConnectionClose(closedConn) {
       }
     }
     if (leftPeerId) {
+      const leaverName = roomPlayers[leftPeerId] ? roomPlayers[leftPeerId].name : "Rakip";
       delete roomPlayers[leftPeerId];
       delete playerProgress[leftPeerId];
       delete playerFinishData[leftPeerId];
-      broadcastPlayersList();
-      updateLobbyPlayersUI();
+      
+      // Oyun aktifken biri çıktıysa, oda sahibi ve diğer kalanlara haber verip sonlandır
+      if (isGameActive) {
+        alert(translateText('opponentLeft'));
+        // Diğer oyunculara da bildir
+        sendPeerData({ type: 'OPPONENT_LEFT_GAME', name: leaverName });
+        leaveToLobby();
+      } else {
+        broadcastPlayersList();
+        updateLobbyPlayersUI();
+      }
     }
   } else {
     // Client isek ve host ile bağlantı koptuysa lobiye dön
@@ -232,12 +242,23 @@ function handleIncomingData(data, senderConn) {
           alert(translateText('hostLeft'));
           leaveToLobby();
         } else {
+          const leaverName = roomPlayers[data.peerId] ? roomPlayers[data.peerId].name : "Rakip";
           delete roomPlayers[data.peerId];
           delete playerProgress[data.peerId];
           delete playerFinishData[data.peerId];
-          updateLobbyPlayersUI();
+          if (isGameActive) {
+            alert(translateText('opponentLeft'));
+            leaveToLobby();
+          } else {
+            updateLobbyPlayersUI();
+          }
         }
       }
+      break;
+
+    case 'OPPONENT_LEFT_GAME':
+      alert(translateText('opponentLeft'));
+      leaveToLobby();
       break;
 
     case 'ROUND_READY':
