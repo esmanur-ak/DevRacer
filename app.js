@@ -1000,8 +1000,13 @@ function resolveMultiplayerOutcome() {
   // Ben bitirdim mi?
   const myFinish = playerFinishData[peer.id];
   if (!myFinish) {
-    // Henüz bitirmedim ama rakip bitirmiş olabilir
-    showOpponentFinishedBanner();
+    // Henüz bitirmedim ama rakip bitirmiş olabilir. 
+    // Eğer bitirenler listesinde benden başka biri varsa uyarıyı göster.
+    const finishedIds = Object.keys(playerFinishData);
+    const hasOpponentFinished = finishedIds.some(id => id !== peer.id);
+    if (hasOpponentFinished) {
+      showOpponentFinishedBanner();
+    }
     return;
   }
 
@@ -1045,8 +1050,6 @@ function showMultiplayerResults() {
   rematchRequestBox.classList.add('hidden');
 
   const resultTitle = document.getElementById('result-title');
-  resultTitle.innerHTML = translateText('raceResults');
-  resultTitle.style.color = "#fbbf24";
 
   // Oyuncuları bitirme süresine göre sırala
   const sortedPlayers = Object.keys(playerFinishData)
@@ -1057,6 +1060,28 @@ function showMultiplayerResults() {
       elapsedMs: playerFinishData[id].elapsedMs
     }))
     .sort((a, b) => a.elapsedMs - b.elapsedMs);
+
+  const roundWinnerId = sortedPlayers[0].id;
+  const isMeWinner = roundWinnerId === peer.id;
+
+  if (matchMode === 'single') {
+    if (isMeWinner) {
+      resultTitle.innerHTML = `Tebrikler, Kazandın! 🏆⚡`;
+      resultTitle.style.color = "#22c55e";
+    } else {
+      resultTitle.innerHTML = `${roomPlayers[roundWinnerId].name} Kazandı! 🥈`;
+      resultTitle.style.color = "#ef4444";
+    }
+  } else {
+    // Seri durumunu hesaplayıp güncelleyelim (Sadece host artırır ama başlıkta gösterebiliriz)
+    if (isMeWinner) {
+      resultTitle.innerHTML = `Raundu Kazandın! ⚡`;
+      resultTitle.style.color = "#22c55e";
+    } else {
+      resultTitle.innerHTML = `Raundu ${roomPlayers[roundWinnerId].name} Kazandı! 🥈`;
+      resultTitle.style.color = "#ef4444";
+    }
+  }
 
   // Sonuç alanını dinamik doldur
   const showcase = document.querySelector('.result-profiles-showcase');
@@ -1105,40 +1130,39 @@ function showMultiplayerResults() {
     document.getElementById('res-errors').innerText = myFinish.stats.errors;
   }
 
-  // Seri / Rövanş buton yönetimi
-  if (isHost) {
-    if (matchMode !== 'single') {
-      // Raundun kazananını bulalım ve skorunu ekleyelim
-      const roundWinnerId = sortedPlayers[0].id;
-      playerWins[roundWinnerId] = (playerWins[roundWinnerId] || 0) + 1;
+  if (matchMode !== 'single') {
+    // Raundun kazananını bulalım ve skorunu ekleyelim
+    const roundWinnerId = sortedPlayers[0].id;
+    playerWins[roundWinnerId] = (playerWins[roundWinnerId] || 0) + 1;
 
-      // Seri galibi var mı?
-      const targetWins = matchMode === 'bo3' ? 2 : 3;
-      let seriesWinnerId = null;
-      Object.keys(playerWins).forEach(id => {
-        if (playerWins[id] >= targetWins) {
-          seriesWinnerId = id;
-        }
-      });
+    // Seri galibi var mı?
+    const targetWins = matchMode === 'bo3' ? 2 : 3;
+    let seriesWinnerId = null;
+    Object.keys(playerWins).forEach(id => {
+      if (playerWins[id] >= targetWins) {
+        seriesWinnerId = id;
+      }
+    });
 
-      if (seriesWinnerId) {
-        const winnerProfile = roomPlayers[seriesWinnerId];
-        resultTitle.innerHTML = translateText('seriesChampionMe', {name: winnerProfile.name});
-        resultTitle.style.color = "#fbbf24";
+    if (seriesWinnerId) {
+      const winnerProfile = roomPlayers[seriesWinnerId];
+      resultTitle.innerHTML = translateText('seriesChampionMe', {name: winnerProfile.name});
+      resultTitle.style.color = "#fbbf24";
+      if (isHost) {
         btnRematch.classList.remove('hidden');
         btnRematch.disabled = false;
-      } else {
+      }
+    } else {
+      if (isHost) {
         btnNextRound.classList.remove('hidden');
         btnNextRound.disabled = false;
       }
-    } else {
+    }
+  } else {
+    if (isHost) {
       btnRematch.classList.remove('hidden');
       btnRematch.disabled = false;
     }
-  } else {
-    // Katılımcı için butonlar pasif durumdadır (Oda sahibinin aksiyonu beklenir)
-    btnNextRound.classList.add('hidden');
-    btnRematch.classList.add('hidden');
   }
 }
 

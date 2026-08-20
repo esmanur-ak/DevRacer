@@ -367,3 +367,14 @@ function broadcastPlayersList() {
     });
   }
 }
+
+// Canlı ilerleme çubuklarını günceller
+function updateRaceProgressUI() {
+  Object.keys(playerProgress).forEach(id => {
+    const percent = playerProgress[id];
+    const bar = document.getElementById(`progress-bar-${id}`);
+    if (bar) {
+      bar.style.width = `${percent}%`;
+    }
+  });
+}
