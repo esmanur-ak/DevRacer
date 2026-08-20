@@ -51,8 +51,8 @@ function setupConnectionListeners(connection) {
     });
 
     if (isHost) {
-      // Host olarak yeni bağlanana oyun ayarlarını gönder
-      connection.send({ type: 'SET_MATCH_MODE', mode: matchMode });
+      // Host olarak yeni bağlanana oyun ayarlarını (mod ve zorluk) gönder
+      connection.send({ type: 'SET_MATCH_MODE', mode: matchMode, difficulty: selectDifficulty.value });
       
       // Host olarak tüm oyuncuların listesini güncelle ve herkese dağıt
       roomPlayers[peer.id] = myProfile;
@@ -137,6 +137,11 @@ function leaveToLobby() {
   const note = document.getElementById('opponent-finished-note');
   if (note) note.classList.add('hidden');
 
+  // Seçicileri tekrar aktif hale getir
+  selectLanguage.disabled = false;
+  selectDifficulty.disabled = false;
+  selectSeries.disabled = false;
+
   // URL'deki parametreyi temizle
   if (window.location.search) {
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -152,6 +157,13 @@ function handleIncomingData(data, senderConn) {
 
     case 'SET_MATCH_MODE':
       matchMode = data.mode;
+      if (data.difficulty) {
+        selectDifficulty.value = data.difficulty;
+      }
+      // Katılımcı için ayar alanlarını kilitle ki host yönetebilsin
+      selectLanguage.disabled = true;
+      selectDifficulty.disabled = true;
+      selectSeries.disabled = true;
       break;
 
     case 'SHARE_PROFILE':

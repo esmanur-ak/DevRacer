@@ -103,7 +103,7 @@
         <p class="code-subtext" data-translate="codeSubtext">Kodunuz mu yok?<br>Sorun değil. İstediğiniz bir modda bir oyun başlatabilirsiniz.</p>
       </div>
 
-      <!-- LOBİ AYARLARI (DİL VE SERİ SEÇİMİ) -->
+      <!-- LOBİ AYARLARI (DİL, ZORLUK VE SERİ SEÇİMİ) -->
       <div class="lobby-settings-row">
         <!-- DİL SEÇİM KUTUSU -->
         <div class="language-selection">
@@ -116,6 +116,16 @@
             <option value="HTML">🌐 HTML / CSS</option>
             <option value="CS">🔷 C#</option>
             <option value="JAVA">☕ Java</option>
+          </select>
+        </div>
+
+        <!-- ZORLUK SEÇİMİ -->
+        <div class="language-selection">
+          <label for="select-difficulty" data-translate="selectDifficulty">🔥 Kod Zorluğu:</label>
+          <select id="select-difficulty" class="custom-select">
+            <option value="easy" data-translate="difficultyEasy">🟢 Kolay (Basit kodlar)</option>
+            <option value="medium" data-translate="difficultyMedium" selected>🟡 Orta (Standart kodlar)</option>
+            <option value="hard" data-translate="difficultyHard">🔴 Zor (Algoritmik / Uzun)</option>
           </select>
         </div>
 

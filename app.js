@@ -12,6 +12,10 @@ const TRANSLATIONS = {
     codeSubtext: "Kodunuz mu yok?<br>Sorun değil. İstediğiniz bir modda bir oyun başlatabilirsiniz.",
     selectLanguage: "💻 Yarışılacak Yazılım Dili:",
     selectLanguageAll: "🔀 Karışık (Tüm Diller)",
+    selectDifficulty: "🔥 Kod Zorluğu:",
+    difficultyEasy: "🟢 Kolay (Basit kodlar)",
+    difficultyMedium: "🟡 Orta (Standart kodlar)",
+    difficultyHard: "🔴 Zor (Algoritmik / Uzun)",
     matchSeries: "🏆 Maç Serisi:",
     singleMatch: "⚡ Tek Maç",
     bo3: "🥇 Best of 3 (2 Galibiyet)",
@@ -110,6 +114,10 @@ const TRANSLATIONS = {
     codeSubtext: "Don't have a code?<br>No problem. You can start a game in any mode.",
     selectLanguage: "💻 Programming Language:",
     selectLanguageAll: "🔀 Mixed (All Languages)",
+    selectDifficulty: "🔥 Code Difficulty:",
+    difficultyEasy: "🟢 Easy (Simple code)",
+    difficultyMedium: "🟡 Medium (Standard code)",
+    difficultyHard: "🔴 Hard (Algorithmic / Long)",
     matchSeries: "🏆 Match Series:",
     singleMatch: "⚡ Single Match",
     bo3: "🥇 Best of 3 (2 Wins)",
@@ -256,6 +264,7 @@ const raceCard = document.getElementById('race-card');
 const resultCard = document.getElementById('result-card');
 
 const selectLanguage = document.getElementById('select-language');
+const selectDifficulty = document.getElementById('select-difficulty');
 const btnSolo = document.getElementById('btn-solo');
 const btnRestartSolo = document.getElementById('btn-restart-solo');
 
@@ -376,19 +385,26 @@ function loadPersonalRecord() {
 // 2. SEÇİLEN DİLE GÖRE RASTGELE KOD GETİRME
 function getRandomCodeByLanguage() {
   const selectedLang = selectLanguage.value;
+  const selectedDifficulty = selectDifficulty.value || 'medium';
+  
   if (selectedLang === 'ALL') {
-    const allCodes = [
-      ...CODE_DATABASE.JS,
-      ...CODE_DATABASE.PY,
-      ...CODE_DATABASE.CPP,
-      ...CODE_DATABASE.HTML,
-      ...CODE_DATABASE.CS,
-      ...CODE_DATABASE.JAVA
-    ];
+    let allCodes = [];
+    for (let lang in CODE_DATABASE) {
+      if (CODE_DATABASE[lang][selectedDifficulty]) {
+        allCodes.push(...CODE_DATABASE[lang][selectedDifficulty]);
+      }
+    }
+    // Fallback if empty
+    if (allCodes.length === 0) return "const test = () => 'DevRacer';";
     return allCodes[Math.floor(Math.random() * allCodes.length)];
   } else {
-    const langCodes = CODE_DATABASE[selectedLang];
-    return langCodes[Math.floor(Math.random() * langCodes.length)];
+    const langObj = CODE_DATABASE[selectedLang];
+    if (langObj && langObj[selectedDifficulty]) {
+      const difficultyCodes = langObj[selectedDifficulty];
+      return difficultyCodes[Math.floor(Math.random() * difficultyCodes.length)];
+    }
+    // Fallback
+    return "const test = () => 'DevRacer';";
   }
 }
 
@@ -1136,6 +1152,30 @@ btnRestartSolo.addEventListener('click', () => {
     lobbyCard.classList.remove('hidden');
   }
 });
+
+// Ayarlar değiştirildiğinde host ise tüm katılımcılara bildir
+if (selectLanguage) {
+  selectLanguage.addEventListener('change', () => {
+    if (isMultiplayer && isHost) {
+      sendPeerData({ type: 'SET_MATCH_MODE', mode: selectSeries.value, difficulty: selectDifficulty.value });
+    }
+  });
+}
+if (selectDifficulty) {
+  selectDifficulty.addEventListener('change', () => {
+    if (isMultiplayer && isHost) {
+      sendPeerData({ type: 'SET_MATCH_MODE', mode: selectSeries.value, difficulty: selectDifficulty.value });
+    }
+  });
+}
+if (selectSeries) {
+  selectSeries.addEventListener('change', () => {
+    matchMode = selectSeries.value;
+    if (isMultiplayer && isHost) {
+      sendPeerData({ type: 'SET_MATCH_MODE', mode: matchMode, difficulty: selectDifficulty.value });
+    }
+  });
+}
 
 btnCopyId.addEventListener('click', () => {
   const baseUrl = window.location.href.split('?')[0];

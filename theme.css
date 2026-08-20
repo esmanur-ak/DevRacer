@@ -768,7 +768,7 @@ input[type="text"]:focus {
 /* LOBİ AYARLARI */
 .lobby-settings-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 1rem;
 }
 
