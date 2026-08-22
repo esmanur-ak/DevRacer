@@ -100,7 +100,7 @@ header h1 {
   background-size: 1.25rem;
   color: #fff;
   border: 1px solid #334155;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
   outline: none;
@@ -108,9 +108,6 @@ header h1 {
   -moz-appearance: none;
   appearance: none;
   transition: all 0.2s ease;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .custom-select option {
