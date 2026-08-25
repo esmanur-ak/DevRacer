@@ -569,7 +569,12 @@ function finishRace() {
 
   if (isMultiplayer) {
     myFinishData = { stats: finalStats, elapsedMs };
-    sendPeerData({ type: 'FINISHED', stats: finalStats, elapsedMs });
+    playerFinishData[peer.id] = { stats: finalStats, elapsedMs };
+    if (isHost) {
+      sendPeerData({ type: 'PLAYER_FINISHED', peerId: peer.id, stats: finalStats, elapsedMs });
+    } else {
+      sendPeerData({ type: 'FINISHED', stats: finalStats, elapsedMs });
+    }
     resolveMultiplayerOutcome();
   } else {
     const currentRecord = parseFloat(localStorage.getItem('csr_best_time') || '999999');
