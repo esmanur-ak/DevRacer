@@ -1131,10 +1131,8 @@ function showMultiplayerResults() {
       const winnerProfile = roomPlayers[seriesWinnerId];
       resultTitle.innerHTML = translateText('seriesChampionMe', {name: winnerProfile.name});
       resultTitle.style.color = "#fbbf24";
-      if (isHost) {
-        btnRematch.classList.remove('hidden');
-        btnRematch.disabled = false;
-      }
+      btnRematch.classList.remove('hidden');
+      btnRematch.disabled = false;
     } else {
       if (isHost) {
         btnNextRound.classList.remove('hidden');
@@ -1142,10 +1140,8 @@ function showMultiplayerResults() {
       }
     }
   } else {
-    if (isHost) {
-      btnRematch.classList.remove('hidden');
-      btnRematch.disabled = false;
-    }
+    btnRematch.classList.remove('hidden');
+    btnRematch.disabled = false;
   }
 }
 
@@ -1291,7 +1287,7 @@ function initProfileEvents() {
   btnRematch.addEventListener('click', () => {
     btnRematch.innerText = "Rövanş İstendi... ⏳";
     btnRematch.disabled = true;
-    sendPeerData({ type: 'REMATCH_REQUEST' });
+    sendPeerData({ type: 'REMATCH_REQUEST', peerId: peer.id });
   });
 
   btnAcceptRematch.addEventListener('click', () => {

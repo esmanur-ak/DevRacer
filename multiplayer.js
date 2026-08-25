@@ -278,8 +278,14 @@ function handleIncomingData(data, senderConn) {
       break;
 
     case 'REMATCH_REQUEST':
-      rematchRequestBox.classList.remove('hidden');
-      rematchRequestText.innerText = translateText('rematchRequestText');
+      if (data.peerId !== peer.id) {
+        rematchRequestBox.classList.remove('hidden');
+        rematchRequestText.innerText = translateText('rematchRequestText');
+      }
+      if (isHost) {
+        // Oda sahibi ise diğer tüm oyunculara da duyur
+        sendPeerData({ type: 'REMATCH_REQUEST', peerId: data.peerId });
+      }
       break;
 
     case 'REMATCH_ANSWER':
