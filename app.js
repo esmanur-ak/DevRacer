@@ -1152,11 +1152,7 @@ function showMultiplayerResults() {
 btnSolo.addEventListener('click', startSoloGame);
 
 btnRestartSolo.addEventListener('click', () => {
-  if (peer && typeof leaveToLobby === 'function') leaveToLobby();
-  else {
-    resultCard.classList.add('hidden');
-    lobbyCard.classList.remove('hidden');
-  }
+  startSoloGame();
 });
 
 // Ayarlar değiştirildiğinde host ise tüm katılımcılara bildir
