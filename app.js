@@ -1486,4 +1486,3 @@ function updateLeaderboardPodium() {
 
 // DevRacer optimization checkpoint 1
 // DevRacer optimization checkpoint 2
-// DevRacer optimization checkpoint 3
