@@ -615,79 +615,14 @@ function showResults(stats) {
   btnNextRound.classList.add('hidden');
   btnRematch.classList.add('hidden');
   rematchRequestBox.classList.add('hidden');
+
+  // Solo butonlarını göster
+  btnRestartSolo.classList.remove('hidden');
+  btnChallengeFriend.classList.remove('hidden');
+  btnBackLobbySolo.classList.remove('hidden');
 }
 
-function showMultiplayerResults(myStats, didIWin, opponentStats = null, isSeriesFinished = false) {
-  raceCard.classList.add('hidden');
-  resultCard.classList.remove('hidden');
-  document.querySelector('.result-actions').classList.remove('hidden');
 
-  btnNextRound.classList.add('hidden');
-  btnRematch.classList.add('hidden');
-  rematchRequestBox.classList.add('hidden');
-
-  const resultTitle = document.getElementById('result-title');
-
-  if (matchMode === 'single') {
-    if (didIWin) {
-      resultTitle.innerHTML = `Tebrikler, Kazandın! 🏆⚡`;
-      resultTitle.style.color = "#22c55e";
-    } else {
-      resultTitle.innerHTML = `${opponentProfile.name} Kazandı! 🥈`;
-      resultTitle.style.color = "#ef4444";
-    }
-    btnRematch.classList.remove('hidden');
-    btnRematch.innerText = "🔥 RÖVANŞ TEKLİF ET";
-    btnRematch.disabled = false;
-  } else if (isSeriesFinished) {
-    if (myWins > opponentWins) {
-      resultTitle.innerHTML = `🏆 Seri Şampiyonu: ${myProfile.name}! 👑`;
-      resultTitle.style.color = "#22c55e";
-    } else {
-      resultTitle.innerHTML = `🥈 Seri Şampiyonu: ${opponentProfile.name}!`;
-      resultTitle.style.color = "#ef4444";
-    }
-    btnRematch.classList.remove('hidden');
-    btnRematch.innerText = "🔥 RÖVANŞ TEKLİF ET";
-    btnRematch.disabled = false;
-  } else {
-    if (didIWin) {
-      resultTitle.innerHTML = `Raundu Kazandın! ⚡`;
-      resultTitle.style.color = "#38bdf8";
-    } else {
-      resultTitle.innerHTML = `Raundu Rakip Kazandı! 🥈`;
-      resultTitle.style.color = "#f87171";
-    }
-    btnNextRound.classList.remove('hidden');
-    btnNextRound.innerText = "🎮 Sonraki Raundu Başlat";
-    btnNextRound.disabled = false;
-  }
-
-  document.getElementById('res-wpm').innerText = myStats.duration || myStats.wpm;
-  document.getElementById('res-cpm').innerText = myStats.cpm;
-  document.getElementById('res-errors').innerText = myStats.errors;
-
-  // Render both profiles side by side
-  document.getElementById('res-my-avatar').innerText = myProfile.avatar;
-  document.getElementById('res-my-avatar').style.background = myProfile.bg;
-  document.getElementById('res-my-name').innerText = myProfile.name;
-
-  document.getElementById('res-opponent-avatar').innerText = opponentProfile.avatar;
-  document.getElementById('res-opponent-avatar').style.background = opponentProfile.bg;
-  document.getElementById('res-opponent-name').innerText = opponentProfile.name;
-
-  document.getElementById('res-vs').classList.remove('hidden');
-  document.getElementById('res-opponent-profile').classList.remove('hidden');
-
-  // Skor Gösterimi
-  const scoreEl = document.getElementById('res-series-score');
-  if (matchMode !== 'single') {
-    scoreEl.innerText = `${myWins} - ${opponentWins}`;
-    scoreEl.classList.remove('hidden');
-  } else {
-    scoreEl.classList.add('hidden');
-  }
-}
 
 // Ben bitirdim ama rakip henüz bitirmedi — sonuç ekranını "bekleniyor" modunda göster.
 function showWaitingForOpponent(myStats) {
@@ -1032,6 +967,11 @@ function showMultiplayerResults() {
   btnRematch.classList.add('hidden');
   rematchRequestBox.classList.add('hidden');
 
+  // Solo butonlarını sakla, lobiye dön butonunu göster
+  btnRestartSolo.classList.add('hidden');
+  btnChallengeFriend.classList.add('hidden');
+  btnBackLobbySolo.classList.remove('hidden');
+
   const resultTitle = document.getElementById('result-title');
 
   // Oyuncuları bitirme süresine göre sırala
@@ -1153,8 +1093,12 @@ btnRestartSolo.addEventListener('click', () => {
 });
 
 btnBackLobbySolo.addEventListener('click', () => {
-  resultCard.classList.add('hidden');
-  lobbyCard.classList.remove('hidden');
+  if (isMultiplayer && typeof leaveToLobby === 'function') {
+    leaveToLobby();
+  } else {
+    resultCard.classList.add('hidden');
+    lobbyCard.classList.remove('hidden');
+  }
 });
 
 // Ayarlar değiştirildiğinde host ise tüm katılımcılara bildir
