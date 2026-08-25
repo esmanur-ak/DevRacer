@@ -271,6 +271,7 @@ const selectLanguage = document.getElementById('select-language');
 const selectDifficulty = document.getElementById('select-difficulty');
 const btnSolo = document.getElementById('btn-solo');
 const btnRestartSolo = document.getElementById('btn-restart-solo');
+const btnBackLobbySolo = document.getElementById('btn-back-lobby-solo');
 
 const btnCreateRoom = document.getElementById('btn-create-room');
 const btnJoinRoom = document.getElementById('btn-join-room');
@@ -1153,6 +1154,11 @@ btnSolo.addEventListener('click', startSoloGame);
 
 btnRestartSolo.addEventListener('click', () => {
   startSoloGame();
+});
+
+btnBackLobbySolo.addEventListener('click', () => {
+  resultCard.classList.add('hidden');
+  lobbyCard.classList.remove('hidden');
 });
 
 // Ayarlar değiştirildiğinde host ise tüm katılımcılara bildir
