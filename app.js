@@ -1071,15 +1071,16 @@ function showMultiplayerResults() {
       const winnerProfile = roomPlayers[seriesWinnerId];
       resultTitle.innerHTML = translateText('seriesChampionMe', {name: winnerProfile.name});
       resultTitle.style.color = "#fbbf24";
+      btnRematch.innerText = translateText('rematch');
       btnRematch.classList.remove('hidden');
       btnRematch.disabled = false;
     } else {
-      if (isHost) {
-        btnNextRound.classList.remove('hidden');
-        btnNextRound.disabled = false;
-      }
+      btnNextRound.innerText = translateText('nextRound');
+      btnNextRound.classList.remove('hidden');
+      btnNextRound.disabled = false;
     }
   } else {
+    btnRematch.innerText = translateText('rematch');
     btnRematch.classList.remove('hidden');
     btnRematch.disabled = false;
   }
