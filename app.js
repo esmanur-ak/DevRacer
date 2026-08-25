@@ -27,7 +27,7 @@ const TRANSLATIONS = {
     roomCreated: "Oda Oluşturuldu! 🎮",
     roomJoined: "Odaya Katılındı! 🎮",
     roomInviteDesc: "Arkadaşlarılana bu ID'yi göndererek oyuna davet et (En fazla 5 kişi):",
-    copyInviteLink: "📋 Davet Linkini Kopyala",
+    copyInviteLink: "📋 Oda Kodunu Kopyala",
     joinedPlayers: "👤 KATILAN OYUNCULAR:",
     waitingPlayers: "⏳ Diğer oyuncuların katılması bekleniyor...",
     cancelMenu: "İptal Et / Ana Menüye Dön",
@@ -85,7 +85,7 @@ const TRANSLATIONS = {
     sen: "(SEN)",
     owner: "👑 Oda Sahibi",
     player: "🎮 Oyuncu",
-    linkCopied: "Link Kopyalandı! ✅",
+    linkCopied: "Kod Kopyalandı! ✅",
     confirmLeave: "Yarıştan ayrılmak istediğine emin misin?",
     rematchRequested: "Rövanş İstendi... ⏳",
     readyWaiting: "Hazır! ⏳",
@@ -131,7 +131,7 @@ const TRANSLATIONS = {
     roomCreated: "Room Created! 🎮",
     roomJoined: "Room Joined! 🎮",
     roomInviteDesc: "Send this ID to your friends to invite them (Max 5 players):",
-    copyInviteLink: "📋 Copy Invite Link",
+    copyInviteLink: "📋 Copy Room Code",
     joinedPlayers: "👤 JOINED PLAYERS:",
     waitingPlayers: "⏳ Waiting for other players to join...",
     cancelMenu: "Cancel / Return to Main Menu",
@@ -189,7 +189,7 @@ const TRANSLATIONS = {
     sen: "(YOU)",
     owner: "👑 Room Host",
     player: "🎮 Player",
-    linkCopied: "Link Copied! ✅",
+    linkCopied: "Code Copied! ✅",
     confirmLeave: "Are you sure you want to leave the race?",
     rematchRequested: "Rematch Requested... ⏳",
     readyWaiting: "Ready! ⏳",
@@ -1126,8 +1126,7 @@ if (selectSeries) {
 }
 
 btnCopyId.addEventListener('click', () => {
-  const baseUrl = window.location.href.split('?')[0];
-  const shareUrl = `${baseUrl}?room=${displayRoomId.value}`;
+  const code = displayRoomId.value;
 
   function fallbackCopyText(text) {
     const textArea = document.createElement("textarea");
@@ -1147,11 +1146,11 @@ btnCopyId.addEventListener('click', () => {
   }
 
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(shareUrl).catch(() => {
-      fallbackCopyText(shareUrl);
+    navigator.clipboard.writeText(code).catch(() => {
+      fallbackCopyText(code);
     });
   } else {
-    fallbackCopyText(shareUrl);
+    fallbackCopyText(code);
   }
 
   btnCopyId.innerText = translateText('linkCopied');
