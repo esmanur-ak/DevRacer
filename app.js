@@ -1367,9 +1367,9 @@ const modalContents = {
     body: `
       <p>DevRacer platformu ile ilgili görüşlerinizi, geri bildirimlerinizi veya hata bildirimlerinizi bizimle paylaşabilirsiniz:</p>
       <h3>E-Posta</h3>
-      <p>Destek ve işbirlikleri için: <a href="mailto:support@devracer.com" style="color: #38bdf8; text-decoration: underline;">support@devracer.com</a></p>
+      <p>Destek ve işbirlikleri için: <a href="mailto:esmanur.ak@ogr.ksbu.edu.tr" style="color: #38bdf8; text-decoration: underline;">esmanur.ak@ogr.ksbu.edu.tr</a></p>
       <h3>Topluluk</h3>
-      <p>Yazılımcı topluluğumuza katılmak, diğer yarışçılarla iletişim kurmak ve güncellemelerden haberdar olmak için Discord sunucumuzu ve GitHub projemizi ziyaret edebilirsiniz.</p>
+      <p>Yazılımcı topluluğumuza katılmak, diğer yarışçılarla iletişim kurmak ve güncellemelerden haberdar olmak için LinkedIn hesabımızı ve GitHub projemizi ziyaret edebilirsiniz.</p>
     `
   }
 };

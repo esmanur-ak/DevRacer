@@ -22,7 +22,8 @@
   <div class="container">
     <header>
       <h1>⚡ DEVRACER ⚡</h1>
-      <p id="personal-record">🏆 <span data-translate="personalRecord">En İyi Süren:</span> <strong id="record-wpm">--</strong> <span data-translate="personalRecordSec">sn</span></p>
+      <p id="personal-record">🏆 <span data-translate="personalRecord">En İyi Süren:</span> <strong
+          id="record-wpm">--</strong> <span data-translate="personalRecordSec">sn</span></p>
       <div id="run-history" class="run-history"></div>
     </header>
 
@@ -35,7 +36,8 @@
         <div class="profile-row">
           <div id="current-avatar-preview" class="avatar-circle-preview"
             style="background: linear-gradient(135deg, #0284c7, #2563eb);">💻</div>
-          <input type="text" id="player-name" placeholder="Oyuncu adınızı girin..." data-translate-placeholder="playerNamePlaceholder" maxlength="15" value="Yarışçı" />
+          <input type="text" id="player-name" placeholder="Oyuncu adınızı girin..."
+            data-translate-placeholder="playerNamePlaceholder" maxlength="15" value="Yarışçı" />
         </div>
         <div class="avatar-picker-label" data-translate="selectAvatar">Avatar Seçin:</div>
         <div class="avatar-grid" id="avatar-grid">
@@ -100,7 +102,8 @@
               <path d="M8 5v14l11-7z" />
             </svg></button>
         </div>
-        <p class="code-subtext" data-translate="codeSubtext">Kodunuz mu yok?<br>Sorun değil. İstediğiniz bir modda bir oyun başlatabilirsiniz.</p>
+        <p class="code-subtext" data-translate="codeSubtext">Kodunuz mu yok?<br>Sorun değil. İstediğiniz bir modda bir
+          oyun başlatabilirsiniz.</p>
       </div>
 
       <!-- LOBİ AYARLARI (DİL, ZORLUK VE SERİ SEÇİMİ) -->
@@ -165,15 +168,19 @@
       <h3 id="room-info-title" data-translate="roomCreated">Oda Oluşturuldu! 🎮</h3>
       <p data-translate="roomInviteDesc">Arkadaşlarılana bu ID'yi göndererek oyuna davet et (En fazla 5 kişi):</p>
       <div class="share-box">
-        <input type="text" id="display-room-id" style="text-align: center; font-size: 1.5rem; letter-spacing: 5px; font-weight: 800;" readonly />
+        <input type="text" id="display-room-id"
+          style="text-align: center; font-size: 1.5rem; letter-spacing: 5px; font-weight: 800;" readonly />
         <button id="btn-copy-id" class="btn action" data-translate="copyInviteLink">📋 Davet Linkini Kopyala</button>
       </div>
 
       <!-- KATILAN OYUNCULARIN LİSTESİ -->
-      <div class="connected-players-box" style="background: rgba(9, 13, 22, 0.6); padding: 1rem; border-radius: 12px; border: 1px solid #1e293b; margin: 1rem 0; text-align: left;">
-        <div style="font-weight: 800; color: #38bdf8; font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between;">
+      <div class="connected-players-box"
+        style="background: rgba(9, 13, 22, 0.6); padding: 1rem; border-radius: 12px; border: 1px solid #1e293b; margin: 1rem 0; text-align: left;">
+        <div
+          style="font-weight: 800; color: #38bdf8; font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between;">
           <span data-translate="joinedPlayers">👤 KATILAN OYUNCULAR:</span>
-          <span id="player-count-badge" style="background: #1e293b; padding: 0.1rem 0.5rem; border-radius: 8px; font-size: 0.8rem; color: #94a3b8;">1/5</span>
+          <span id="player-count-badge"
+            style="background: #1e293b; padding: 0.1rem 0.5rem; border-radius: 8px; font-size: 0.8rem; color: #94a3b8;">1/5</span>
         </div>
         <div id="room-player-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
           <!-- Dinamik oyuncu listesi buraya eklenecektir -->
@@ -181,8 +188,10 @@
       </div>
 
       <div class="loading-spinner" style="margin-top: 1.5rem;">
-        <p id="waiting-status-text" class="status-text warning" data-translate="waitingPlayers">⏳ Diğer oyuncuların katılması bekleniyor...</p>
-        <button id="btn-start-multiplayer-game" class="btn primary btn-large hidden" style="margin-top: 0.5rem;" data-translate="startGame">🚀 Oyunu Başlat</button>
+        <p id="waiting-status-text" class="status-text warning" data-translate="waitingPlayers">⏳ Diğer oyuncuların
+          katılması bekleniyor...</p>
+        <button id="btn-start-multiplayer-game" class="btn primary btn-large hidden" style="margin-top: 0.5rem;"
+          data-translate="startGame">🚀 Oyunu Başlat</button>
       </div>
       <button id="btn-leave-room" class="btn-link" data-translate="cancelMenu">İptal Et / Ana Menüye Dön</button>
     </div>
@@ -209,7 +218,8 @@
         <!-- İlerleme çubukları Javascript tarafından dinamik olarak oluşturulacak -->
       </div>
 
-      <p id="opponent-finished-note" class="status-text warning hidden" data-translate="opponentFinished">⚡ Rakip bitirdi! Hızlan!</p>
+      <p id="opponent-finished-note" class="status-text warning hidden" data-translate="opponentFinished">⚡ Rakip
+        bitirdi! Hızlan!</p>
 
       <!-- CANLI İSTATİSTİKLER -->
       <div class="stats-bar">
@@ -232,18 +242,34 @@
 
       <!-- KOD YAZMA ALANI -->
       <div id="code-display" class="code-box"></div>
-      <textarea id="code-input" placeholder="Yazmaya başlamak için buraya tıklayın..." data-translate-placeholder="codeInputPlaceholder" disabled></textarea>
+      <textarea id="code-input" placeholder="Yazmaya başlamak için buraya tıklayın..."
+        data-translate-placeholder="codeInputPlaceholder" disabled></textarea>
 
       <!-- HIZLI REAKSİYON TEPKİ BUTONLARI -->
-      <div id="reactions-container" class="reactions-container hidden" style="margin-top: 1rem; background: rgba(9, 13, 22, 0.4); padding: 0.75rem; border-radius: 12px; border: 1px solid #1e293b; text-align: left;">
-        <span style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 0.5rem; letter-spacing: 0.5px;" data-translate="sendReaction">⚡ RAKİPLERE TEPKİ GÖNDER:</span>
+      <div id="reactions-container" class="reactions-container hidden"
+        style="margin-top: 1rem; background: rgba(9, 13, 22, 0.4); padding: 0.75rem; border-radius: 12px; border: 1px solid #1e293b; text-align: left;">
+        <span
+          style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 0.5rem; letter-spacing: 0.5px;"
+          data-translate="sendReaction">⚡ RAKİPLERE TEPKİ GÖNDER:</span>
         <div class="reactions-grid" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button class="reaction-btn btn" data-reaction="🔥 Alev" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionFire">🔥 Alev</button>
-          <button class="reaction-btn btn" data-reaction="🐢 Yavaşsın" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionSlow">🐢 Yavaşsın</button>
-          <button class="reaction-btn btn" data-reaction="😎 Kolaydı" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionEasy">😎 Kolaydı</button>
-          <button class="reaction-btn btn" data-reaction="😱 Şok" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionShock">😱 Şok</button>
-          <button class="reaction-btn btn" data-reaction="😡 Hile!" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none; background: linear-gradient(135deg, #ef4444, #b91c1c);" data-translate="reactionCheat">😡 Hile!</button>
-          <button class="reaction-btn btn" data-reaction="😭 Pes" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none; background: linear-gradient(135deg, #eab308, #ca8a04); color: #000;" data-translate="reactionForfeit">😭 Pes</button>
+          <button class="reaction-btn btn" data-reaction="🔥 Alev"
+            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionFire">🔥
+            Alev</button>
+          <button class="reaction-btn btn" data-reaction="🐢 Yavaşsın"
+            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionSlow">🐢
+            Yavaşsın</button>
+          <button class="reaction-btn btn" data-reaction="😎 Kolaydı"
+            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionEasy">😎
+            Kolaydı</button>
+          <button class="reaction-btn btn" data-reaction="😱 Şok"
+            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none;" data-translate="reactionShock">😱
+            Şok</button>
+          <button class="reaction-btn btn" data-reaction="😡 Hile!"
+            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none; background: linear-gradient(135deg, #ef4444, #b91c1c);"
+            data-translate="reactionCheat">😡 Hile!</button>
+          <button class="reaction-btn btn" data-reaction="😭 Pes"
+            style="padding: 0.4rem 0.8rem; font-size: 0.9rem; text-transform: none; background: linear-gradient(135deg, #eab308, #ca8a04); color: #000;"
+            data-translate="reactionForfeit">😭 Pes</button>
         </div>
       </div>
 
@@ -288,8 +314,10 @@
       </div>
       <div class="result-actions">
         <!-- SERİ / RÖVANŞ AKSIYONLARI -->
-        <button id="btn-next-round" class="btn primary btn-large hidden" data-translate="nextRound">🎮 SONRAKİ RAUNDA GEÇ</button>
-        <button id="btn-rematch" class="btn action btn-large hidden" data-translate="rematch">🔥 RÖVANŞ TEKLİF ET</button>
+        <button id="btn-next-round" class="btn primary btn-large hidden" data-translate="nextRound">🎮 SONRAKİ RAUNDA
+          GEÇ</button>
+        <button id="btn-rematch" class="btn action btn-large hidden" data-translate="rematch">🔥 RÖVANŞ TEKLİF
+          ET</button>
 
         <div id="rematch-request-box" class="rematch-request-box hidden">
           <p id="rematch-request-text" data-translate="rematchRequestText">Rakip seninle rövanş yapmak istiyor! ⚔️</p>
@@ -300,7 +328,8 @@
         </div>
 
         <button id="btn-restart-solo" class="btn primary btn-large" data-translate="tryAgain">🔄 TEKRAR DENE</button>
-        <button id="btn-challenge-friend" class="btn secondary btn-large" data-translate="challengeFriend">🔥 SKORUNU ARKADAŞINLA YARIŞTIR</button>
+        <button id="btn-challenge-friend" class="btn secondary btn-large" data-translate="challengeFriend">🔥 SKORUNU
+          ARKADAŞINLA YARIŞTIR</button>
         <button id="btn-back-lobby-solo" class="btn-link" data-translate="leaveRace">✕ Ana Menüye Dön</button>
       </div>
     </div>
@@ -330,12 +359,16 @@
       <!-- SOCIAL MEDIA -->
       <div class="footer-socials">
         <!-- LinkedIn -->
-        <a href="https://linkedin.com" target="_blank" class="social-link" title="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+        <a href="https://linkedin.com" target="_blank" class="social-link" title="LinkedIn"><svg viewBox="0 0 24 24"
+            width="20" height="20" fill="currentColor">
+            <path
+              d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
           </svg></a>
         <!-- GitHub -->
-        <a href="https://github.com" target="_blank" class="social-link" title="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+        <a href="https://github.com" target="_blank" class="social-link" title="GitHub"><svg viewBox="0 0 24 24"
+            width="20" height="20" fill="currentColor">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
           </svg></a>
       </div>
 
@@ -349,7 +382,8 @@
 
       <!-- DESCRIPTION -->
       <p class="footer-description" data-translate="footerDesc">
-        DevRacer, kullanıcıların farklı programlama dillerinde hızlarını ve kodlama becerilerini test edebileceği eğlenceli bir kod yarışması platformudur.<br>
+        DevRacer, kullanıcıların farklı programlama dillerinde hızlarını ve kodlama becerilerini test edebileceği
+        eğlenceli bir kod yarışması platformudur.<br>
         Hazırlanan içerikler devamlı kontrol edilmektedir, fakat DevRacer bilgilerinin tamamen doğru olduğunu kabul
         etmez.<br>
       </p>
@@ -373,7 +407,8 @@
   <!-- ÇEREZ ONAY BANNERI -->
   <div id="cookie-consent-banner" class="cookie-banner hidden">
     <div class="cookie-banner-content">
-      <span data-translate="cookieText">🍪 Deneyiminizi geliştirmek ve yarış ayarlarınızı (isim, rekor) tarayıcınızda saklamak için yerel çerezleri
+      <span data-translate="cookieText">🍪 Deneyiminizi geliştirmek ve yarış ayarlarınızı (isim, rekor) tarayıcınızda
+        saklamak için yerel çerezleri
         kullanıyoruz. <a href="#" id="cookie-more-info" data-translate="moreInfo">Detaylı Bilgi</a></span>
       <button id="btn-accept-cookies" class="btn primary" data-translate="accept">Kabul Et ✅</button>
     </div>
