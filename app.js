@@ -1405,26 +1405,30 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeFooterModal();
 });
 
-// ÇEREZ BANNER KONTROLÜ
+// ÇEREZ BANNER/MODAL KONTROLÜ
 (function initCookieBanner() {
   const isAccepted = localStorage.getItem('csr_cookies_accepted');
   const banner = document.getElementById('cookie-consent-banner');
-  const btnAccept = document.getElementById('btn-accept-cookies');
-  const linkMore = document.getElementById('cookie-more-info');
+  const btnAcceptSelected = document.getElementById('btn-accept-selected-cookies');
+  const btnAcceptAll = document.getElementById('btn-accept-all-cookies');
 
   if (!isAccepted) {
     banner.classList.remove('hidden');
+    banner.style.display = 'flex';
   }
 
-  btnAccept.addEventListener('click', () => {
+  const saveConsent = () => {
     localStorage.setItem('csr_cookies_accepted', 'true');
     banner.classList.add('hidden');
-  });
+    banner.style.display = 'none';
+  };
 
-  linkMore.addEventListener('click', (e) => {
-    e.preventDefault();
-    openFooterModal('cookies');
-  });
+  if (btnAcceptSelected) {
+    btnAcceptSelected.addEventListener('click', saveConsent);
+  }
+  if (btnAcceptAll) {
+    btnAcceptAll.addEventListener('click', saveConsent);
+  }
 })();
 
 // OYUNCU PROFİLİ MODAL KONTROLÜ
