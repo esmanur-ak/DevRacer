@@ -226,8 +226,9 @@ function handleIncomingData(data, senderConn) {
 
     case 'FINISHED':
       if (isHost) {
-        playerFinishData[data.peerId] = { stats: data.stats, elapsedMs: data.elapsedMs };
-        sendPeerData({ type: 'PLAYER_FINISHED', peerId: data.peerId, stats: data.stats, elapsedMs: data.elapsedMs });
+        const finishedPeerId = data.peerId || senderConn.peer;
+        playerFinishData[finishedPeerId] = { stats: data.stats, elapsedMs: data.elapsedMs };
+        sendPeerData({ type: 'PLAYER_FINISHED', peerId: finishedPeerId, stats: data.stats, elapsedMs: data.elapsedMs });
         resolveMultiplayerOutcome();
       }
       break;

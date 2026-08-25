@@ -573,7 +573,7 @@ function finishRace() {
     if (isHost) {
       sendPeerData({ type: 'PLAYER_FINISHED', peerId: peer.id, stats: finalStats, elapsedMs });
     } else {
-      sendPeerData({ type: 'FINISHED', stats: finalStats, elapsedMs });
+      sendPeerData({ type: 'FINISHED', peerId: peer.id, stats: finalStats, elapsedMs });
     }
     resolveMultiplayerOutcome();
   } else {
@@ -589,33 +589,6 @@ function finishRace() {
   }
 }
 
-// Kazananı SADECE her iki taraf da bitirdiğinde, süreleri kıyaslayarak belirler.
-// Bu sayede iki oyuncu da neredeyse aynı anda bitirse bile (ağ gecikmesi
-// yüzünden) ikisi de "kazandım" ekranı görmez — gerçekten kim önce bitirdiyse o kazanır.
-function resolveMultiplayerOutcome() {
-  if (!myFinishData) {
-    // Ben henüz bitirmedim ama rakip bitirmiş olabilir — devam et, sadece bilgilendir.
-    if (opponentFinishData) showOpponentFinishedBanner();
-    return;
-  }
-
-  if (!opponentFinishData) {
-    showWaitingForOpponent(myFinishData.stats);
-    return;
-  }
-
-  const iWon = myFinishData.elapsedMs <= opponentFinishData.elapsedMs;
-  if (iWon) {
-    myWins++;
-  } else {
-    opponentWins++;
-  }
-
-  const targetWins = matchMode === 'bo3' ? 2 : (matchMode === 'bo5' ? 3 : 1);
-  const isSeriesFinished = myWins >= targetWins || opponentWins >= targetWins;
-
-  showMultiplayerResults(myFinishData.stats, iWon, opponentFinishData.stats, isSeriesFinished);
-}
 
 // 9. SONUÇ EKRANLARI
 function showResults(stats) {
