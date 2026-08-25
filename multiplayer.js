@@ -213,6 +213,9 @@ function handleIncomingData(data, senderConn) {
         playerProgress[data.peerId] = data.percent;
         sendPeerData({ type: 'PROGRESS_UPDATE', peerId: data.peerId, percent: data.percent });
         updateRaceProgressUI();
+      } else {
+        playerProgress[data.peerId] = data.percent;
+        updateRaceProgressUI();
       }
       break;
 
