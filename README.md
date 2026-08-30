@@ -10,7 +10,7 @@
 
 
 ---
-<img width="996" height="2048" alt="WhatsApp Image 2026-08-30 at 17 14 45" src="https://github.com/user-attachments/assets/6042c22c-5e56-4446-801b-b5013040d304" />
+<img width="946" height="2048" alt="WhatsApp Image 2026-08-30 at 17 21 04" src="https://github.com/user-attachments/assets/41cc4aef-8168-4f63-ae98-abde0bb612b2" />
 
 ## 🎮 Proje Hakkında
 
