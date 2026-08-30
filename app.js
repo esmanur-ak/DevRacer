@@ -1243,9 +1243,11 @@ function initProfileEvents() {
   btnDeclineRematch.addEventListener('click', () => {
     rematchRequestBox.classList.add('hidden');
     sendPeerData({ type: 'REMATCH_ANSWER', answer: 'decline' });
-    if (typeof leaveToLobby === 'function') {
-      leaveToLobby();
-    }
+    setTimeout(() => {
+      if (typeof leaveToLobby === 'function') {
+        leaveToLobby();
+      }
+    }, 500);
   });
 
   // Reaksiyon butonları dinleyicisi
