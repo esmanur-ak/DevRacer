@@ -4,7 +4,7 @@
 
 **Kod yazma hızını arkadaşlarınla yarıştığın, gerçek zamanlı çok oyunculu tip yarışı oyunu.**
 
-[🎮 Canlı Demo](https://devracer-game.netlify.app/) · [🐛 Hata Bildir](https://github.com/esmanur-ak/DevRacer/issues)
+[🎮 OYNAMAK İÇİN :  Canlı Demo](https://devracer-game.netlify.app/) · [🐛 Hata Bildir](https://github.com/esmanur-ak/DevRacer/issues)
 
 </div>
 
