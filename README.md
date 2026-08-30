@@ -66,7 +66,7 @@ Proje herhangi bir build aracı gerektirmez; `index.html` dosyasını doğrudan 
 3. **Solo Mod**'da kendi rekorunu kır ya da **Arkadaş Modu**'nda oda açıp davet kodunu paylaş
 4. Ekranda beliren kodu en hızlı ve en az hatayla yaz
 5. Sonuçlarını gör; rövanş iste, tekrar dene ya da skorunu arkadaşınla paylaş
-<img width="998" height="2048" alt="WhatsApp Image 2026-08-30 at 17 14 55 (1)" src="https://github.com/user-attachments/assets/b596f106-f8fa-4beb-af75-726dad99ba0a" />
+<img width="1897" height="912" alt="Ekran görüntüsü 2026-08-30 171330" src="https://github.com/user-attachments/assets/978b05e0-9d3b-4f3c-9c9d-d21c45f02c02" />
 
 ## 👩‍💻 Geliştirici
 
