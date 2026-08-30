@@ -8,10 +8,9 @@
 
 </div>
 
-<!-- Buraya bir ekran görüntüsü ekleyebilirsin, örn: -->
-<!-- ![DevRacer Ekran Görüntüsü](screenshot.png) -->
 
 ---
+<img width="996" height="2048" alt="WhatsApp Image 2026-08-30 at 17 14 45" src="https://github.com/user-attachments/assets/6042c22c-5e56-4446-801b-b5013040d304" />
 
 ## 🎮 Proje Hakkında
 
