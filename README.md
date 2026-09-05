@@ -68,7 +68,7 @@ Proje herhangi bir build aracı gerektirmez; `index.html` dosyasını doğrudan 
 5. Sonuçlarını gör; rövanş iste, tekrar dene ya da skorunu arkadaşınla paylaş
 <img width="1897" height="912" alt="Ekran görüntüsü 2026-08-30 171330" src="https://github.com/user-attachments/assets/978b05e0-9d3b-4f3c-9c9d-d21c45f02c02" />
 
-## 👩‍💻 Geliştirici
+##  Geliştirici
 
 **Esmanur AK**
 [LinkedIn](https://www.linkedin.com/in/esmanur-ak-b867a4385) · [GitHub](https://github.com/esmanur-ak)
